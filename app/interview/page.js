@@ -364,7 +364,7 @@ export default function InterviewPage() {
     setTimeout(() => {
       setIsProcessingResponse(false)
       console.log("Generating next question...",  Number.parseInt(localStorage.getItem("questionCount") || "0", 10))
-      if ( Number.parseInt(localStorage.getItem("questionCount") || "0", 10) < 3) {
+      if ( Number.parseInt(localStorage.getItem("questionCount") || "0", 10) < 5) {
         generateQuestion(response, next)
       } else {
         endInterview()
