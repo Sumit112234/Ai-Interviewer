@@ -319,7 +319,7 @@ function detectUncertainty(lastUser) {
 
 
 export async function POST(request) {
-  // try {
+  try {
     const body = await request.json()
     const {
       resumeData,
@@ -477,12 +477,12 @@ REMEMBER:
     })
 
     let parsed = null
-    // try {
+    try {
       parsed = JSON.parse(extractJson(text))
-    // } catch (e) {
-    //   console.error("[v0] JSON parse failed, raw text:", text)
-    //   return Response.json({ error: "Model returned invalid JSON." }, { status: 500 })
-    // }
+    } catch (e) {
+      console.error("[v0] JSON parse failed, raw text:", text)
+      return Response.json({ error: "Model returned invalid JSON." }, { status: 500 })
+    }
 
     console.log('parsed question:', parsed , ' from text:', text)
 
@@ -539,9 +539,9 @@ REMEMBER:
       emotion,
       questionCountShouldIncrement: shouldIncrement, // default true
     })
-  // } catch (error) {
-  //   console.error("[v0] Error generating question:", error?.message || error)
-  //   return Response.json({ error: "Failed to generate question" }, { status: 500 })
-  // }
+  } catch (error) {
+    console.error("[v0] Error generating question:", error?.message || error)
+    return Response.json({ error: "Failed to generate question" }, { status: 500 })
+  }
 }
 
