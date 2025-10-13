@@ -1,9 +1,24 @@
+import DynamicFaceAvatar from "@/components/RealisticAiAvatar";
 import Dashboard from "./Dashboard/page";
-
+import Temporary from "./temporary/page";
 export default function Home() {
   return (
     <div>
       <Dashboard/>
+      {/* <DynamicFaceAvatar
+        personality="professional" 
+        isSpeaking={false} 
+        isLoading={false} 
+        emotion="neutral" 
+        eyeDirection="center" 
+        currentText="" 
+        speechProgress={0} 
+        imageBasePath="/images/avatar" 
+      />
+       */}
+
+       {/* <Temporary/> */}
+       
     </div>
   )
 }

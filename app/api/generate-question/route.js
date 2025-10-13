@@ -127,6 +127,7 @@ function generateQuestionBasedOnResume(resumeData, conversation, questionCount, 
   return selectedQuestion
 }
 
+
 import { generateText } from "ai"
 import { cohere } from "@ai-sdk/cohere"
 
@@ -270,7 +271,7 @@ function transcriptFromConversation(conversation, maxTurns = 20) {
   return lastN.map((m) => (m.role === "ai" ? `Interviewer: ${m.content}` : `Candidate: ${m.content}`)).join("\n")
 }
 
-// Best-effort JSON extractor if the model wraps code fences/text
+
 function extractJson(text) {
   const fence = /```(?:json)?\s*([\s\S]*?)\s*```/i
   const match = text.match(fence)
@@ -282,8 +283,43 @@ function extractJson(text) {
   return text
 }
 
+
+function createDefaultTotals() {
+  return {
+    communication: 0,
+    technical: 0,
+    problemSolving: 0,
+    cultureFit: 0,
+  }
+}
+
+function normalizeScores(scores) {
+  const defaults = createDefaultTotals()
+  if (!scores || typeof scores !== "object") return defaults
+  
+  return {
+    communication: typeof scores.communication === "number" ? Math.max(0, Math.min(5, scores.communication)) : 0,
+    technical: typeof scores.technical === "number" ? Math.max(0, Math.min(5, scores.technical)) : 0,
+    problemSolving: typeof scores.problemSolving === "number" ? Math.max(0, Math.min(5, scores.problemSolving)) : 0,
+    cultureFit: typeof scores.cultureFit === "number" ? Math.max(0, Math.min(5, scores.cultureFit)) : 0,
+  }
+}
+
+
+function detectRepeatRequest(lastUser) {
+  const u = String(lastUser || "").toLowerCase()
+  return /(?:\brepeat\b|say (?:that|it) again|pardon|didn'?t catch|again please|could you repeat|can you repeat|what did you ask|come again|one more time|dobara|phir se|sunai nahi diya)/i.test(u)
+}
+
+function detectUncertainty(lastUser) {
+  return /(?:\bi (?:don['']?t|do not) know\b|\bnot confident\b|\bi'?m not confident\b|\bsorry\b|\bnot sure\b|\bno idea\b|\bcan'?t recall\b|\bpata nahi\b|\bmalum nahi\b)/i.test(
+    String(lastUser || "")
+  )
+}
+
+
 export async function POST(request) {
-  try {
+  // try {
     const body = await request.json()
     const {
       resumeData,
@@ -291,7 +327,7 @@ export async function POST(request) {
       questionCount = 0,
       personality = "professional",
       context,
-      currentTotals, // optional running totals from client { communication, technical, problemSolving, cultureFit }
+      currentTotals
     } = body || {}
 
     // Basic validation
@@ -299,7 +335,6 @@ export async function POST(request) {
       return Response.json({ error: "conversation must be an array of {role, content}" }, { status: 400 })
     }
 
-    // Debug logs
     console.log("[v0] POST /api/generate-question", {
       conversationLength: conversation.length,
       questionCount,
@@ -322,19 +357,8 @@ export async function POST(request) {
     const lastAI = lastTwoAIs.slice(-1)[0] || ""
     const prevAI = lastTwoAIs.length > 1 ? lastTwoAIs[0] : ""
 
-    const userSaidRepeat = (() => {
-      const u = String(lastUser || "").toLowerCase()
-      return /(?:\brepeat\b|say (?:that|it) again|pardon|didn'?t catch|again please|could you repeat|can you repeat|what did you ask|come again|one more time)/i.test(
-        u,
-      )
-    })()
-    if (userSaidRepeat && lastAI) {
-      const safeTotals = {
-        communication: currentTotals?.communication || 0,
-        technical: currentTotals?.technical || 0,
-        problemSolving: currentTotals?.problemSolving || 0,
-        cultureFit: currentTotals?.cultureFit || 0,
-      }
+    if (detectRepeatRequest(lastUser) && lastAI) {
+      const safeTotals = normalizeScores(currentTotals)
       return Response.json({
         question: lastAI,
         crossQuestion: null,
@@ -343,36 +367,57 @@ export async function POST(request) {
         followUpTopics: [],
         selectionFlags: [],
         memoryUpdates: [],
-        scores: { communication: 0, technical: 0, problemSolving: 0, cultureFit: 0 },
-        notes: "repeated-last-question",
-        totals: safeTotals,
+        scores: createDefaultTotals(), // No new scores for repeat
+        notes: "Repeated last question - no scoring applied",
+        totals: safeTotals, // Totals unchanged
+        emotion: "neutral",
+        questionCountShouldIncrement: false, // CRITICAL: Don't increment for repeats
       })
     }
 
     const system = `You are a seasoned, human-like interviewer for ${resumeData?.roleAppliedFor || "the role"}.
-Your objectives:
-- Ask clear, targeted questions grounded in the candidate's resume and prior answers (consider the last TWO turns, not just the last one).
-- If candidate is speaking Hindi or mixing Hindi/English, respond in similar language.
-- Starting should be from English language only.
-- Be robust to ASR/microphone errors and misspellings (e.g., "manstack" likely means "mern stack"); infer intended meaning and politely clarify if uncertain.
-- If the candidate expresses uncertainty or apology ("sorry", "I don't know", "not confident"), respond empathetically and simplify or reframe the question.
-- Keep each question concise and human: target 5–22 words; only exceed 22 words when genuinely necessary.
-- Probe with natural cross-questions based on what the candidate just said (and their prior turn if helpful).
-- If there is a last candidate reply, you MUST include a crossQuestion that digs into a concrete detail from that reply.
-- Vary tone and style based on personality: professional, friendly, technical, or senior.
-- If the candidate has answered something well and it feels like a natural endpoint, you MAY choose to end the interview (endInterview=true) after a strong closing question.
-- If the candidate has answered something irrelevant or something such as sexual or abusive or in some flirting type then scold him a little and start asking another question.
-- After each candidate answer, internally evaluate with a rubric:
-  communication (0-5), technical (0-5), problemSolving (0-5), cultureFit (0-5).
-- Provide a brief note (1-2 sentences) justifying the score, and any memory updates or selection flags.
-- Strictly return a single JSON object matching the schema below. Do not include any extra commentary.
-`
+
+CORE RESPONSIBILITIES:
+1. Ask clear, targeted questions based on resume and conversation history
+2. Support bilingual candidates (English/Hindi mixing is fine)
+3. Handle ASR errors gracefully (e.g., "manstack" → "MERN stack")
+4. Show empathy when candidates are uncertain
+5. Keep questions concise (5-22 words; exceed only when essential)
+6. Ask natural follow-up cross-questions based on candidate's last 1-2 replies
+7. Evaluate each answer using the rubric: communication, technical, problemSolving, cultureFit (0-5 each)
+8. Flag inappropriate behavior (sexual, abusive, flirting) professionally
+
+QUESTION INCREMENT RULES:
+- questionCountShouldIncrement = true ONLY for brand new main questions
+- questionCountShouldIncrement = false for:
+  * Cross-questions (follow-ups on candidate's answer)
+  * Clarifications
+  * Repeated/rephrased questions
+  * Simplified versions of previous questions
+
+CROSS-QUESTION RULES:
+- If lastUser is non-empty, you MUST provide a crossQuestion
+- crossQuestion should dig deeper into specific details from their last answer
+- If candidate seems uncertain, crossQuestion should be supportive and simpler
+- If candidate gave a strong answer, crossQuestion should explore technical depth
+
+EMOTION DETECTION:
+- Analyze candidate's tone and content in lastUser
+- Return "neutral" (default), "happy" (enthusiastic/confident), or "angry" (frustrated/upset)
+- If candidate is upset, be more supportive in your next question
+
+INTERVIEW ENDING:
+- Set endInterview=true only after 8+ questions AND when:
+  * Candidate has demonstrated competency
+  * Natural conclusion is reached
+  * Candidate is clearly struggling and has been given fair chances`
 
     const prompt = `Resume Summary:
 ${resumeSummary}
 
-Conversation Transcript (most recent last):
-${transcript || "(no prior messages)"}
+Conversation Transcript:
+${transcript}
+
 
 Recent Context (use both, if present):
 - Previous AI question: "${prevAI || "(none)"}"
@@ -380,8 +425,13 @@ Recent Context (use both, if present):
 - Previous candidate reply: "${prevUser || "(none)"}"
 - Last candidate reply: "${lastUser || "(none)"}"
 
-Guidance:
-- questionCount=${questionCount}, context="${context || ""}", personality="${personality}"
+
+Interview State:
+- questionCount: ${questionCount}
+- context: "${context || ""}"
+- personality: "${personality}"
+
+
 - Consider the last two candidate replies and last two interviewer questions to maintain continuity.
 - Handle potential ASR/mic errors or typos in candidate replies; clarify gently if meaning is ambiguous.
 - Target 5–22 words per question; only exceed if the concept truly needs it.
@@ -389,15 +439,17 @@ Guidance:
 - When lastUser is non-empty, you MUST return a non-null crossQuestion that is directly related to the lastUser content.
 - When appropriate, you may decide to end the interview (endInterview=true) after a strong closing question.
 
-Return ONLY JSON with this exact shape:
+Return ONLY valid JSON with this EXACT structure:
 {
-  "nextQuestion": string,
-  "crossQuestion": string | null,
+  "nextQuestion": string, (5-22 words; exceed only if essential. This is mandatory feild.)
+  "crossQuestion": string || null (if necessary ; else null)
   "endInterview": boolean,
   "reasoning": string,
   "followUpTopics": string[],
   "selectionFlags": string[],
   "memoryUpdates": string[],
+  "emotion": "neutral | happy | angry" ( based on candidate's last response, If a candidate is upset or angry, reflect that in your tone and question choice. If he is giving wrong answers or is not able to answer properly then you can be a angry emotion and ask him other question )
+  "questionCountShouldIncrement" : boolean,  ( true if the question is new and should increment the count; false if repeating or cross-question. Don't return true for every question, only when it genuinely advances the interview. If it is a cross-question then must return false )
   "scores": {
     "communication": number,
     "technical": number,
@@ -410,25 +462,29 @@ Return ONLY JSON with this exact shape:
 Important:
 - Tailor nextQuestion to ${resumeData?.roleAppliedFor || "the role"} using resume data and the last two replies.
 - Keep it natural and realistic, like a human interviewer.
+REMEMBER:
+- questionCountShouldIncrement=false for ALL cross-questions and follow-ups
+- questionCountShouldIncrement=true ONLY for new main interview questions
 - Use crossQuestion when the last answer warrants a deeper probe.
 `
 
     // Call Cohere via AI SDK
-    const model = cohere("command-r-plus") // uses COHERE_API_KEY
+    const model = cohere("command-a-03-2025") 
     const { text } = await generateText({
       model,
       system,
       prompt,
     })
 
-    // Parse model output
     let parsed = null
-    try {
+    // try {
       parsed = JSON.parse(extractJson(text))
-    } catch (e) {
-      console.error("[v0] JSON parse failed, raw text:", text)
-      return Response.json({ error: "Model returned invalid JSON." }, { status: 500 })
-    }
+    // } catch (e) {
+    //   console.error("[v0] JSON parse failed, raw text:", text)
+    //   return Response.json({ error: "Model returned invalid JSON." }, { status: 500 })
+    // }
+
+    console.log('parsed question:', parsed , ' from text:', text)
 
     if (!parsed?.nextQuestion) {
       return Response.json({ error: "Model did not provide nextQuestion." }, { status: 500 })
@@ -449,7 +505,6 @@ Important:
           : "Quick follow-up on your last point: could you walk me through a concrete example, your specific contribution, and any measurable impact?"
       : (parsed.crossQuestion ?? null)
 
-    // Aggregate totals if provided
     const baseTotals = {
       communication: 0,
       technical: 0,
@@ -464,13 +519,14 @@ Important:
       problemSolving: (prior.problemSolving || 0) + (turn.problemSolving || 0),
       cultureFit: (prior.cultureFit || 0) + (turn.cultureFit || 0),
     }
+    
+    const validEmotions = ["neutral", "happy", "angry"]
+    const emotion = validEmotions.includes(parsed.emotion) ? parsed.emotion : "neutral"
 
+     const shouldIncrement = parsed.questionCountShouldIncrement !== false && !computedCrossQuestion
     // Backward-compatible response while adding rich metadata
     return Response.json({
-      // legacy field used by existing frontend
-      question: parsed.nextQuestion,
-
-      // new rich fields
+      question: parsed.nextQuestion ?? computedCrossQuestion ?? "Could you please elaborate?",
       crossQuestion: computedCrossQuestion,
       endInterview: !!parsed.endInterview,
       reasoning: parsed.reasoning || "",
@@ -480,10 +536,12 @@ Important:
       scores: parsed.scores || baseTotals,
       notes: parsed.notes || "",
       totals: aggregated,
+      emotion,
+      questionCountShouldIncrement: shouldIncrement, // default true
     })
-  } catch (error) {
-    console.error("[v0] Error generating question:", error?.message || error)
-    return Response.json({ error: "Failed to generate question" }, { status: 500 })
-  }
+  // } catch (error) {
+  //   console.error("[v0] Error generating question:", error?.message || error)
+  //   return Response.json({ error: "Failed to generate question" }, { status: 500 })
+  // }
 }
 

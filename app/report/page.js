@@ -88,8 +88,9 @@ export default function ReportPage() {
   }
 
   const retakeInterview = () => {
-    localStorage.removeItem("interviewData")
-    router.push("/")
+    // localStorage.removeItem("interviewData")
+    localStorage.setItem('questionCount', 0)
+    router.push("/interview")
   }
 
   if (!interviewData || isLoading) {

@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation"
 import RealisticAIAvatar from "@/components/RealisticAiAvatar"
 import EnhancedSpeechRecognition from "@/components/EnhancedSpeechRecognition"
 import InterviewProgress from "@/components/InterviewProgress"
+import AIAvatar from "@/components/AIAvatar"
 
 export default function InterviewPage() {
   const router = useRouter()
@@ -165,11 +166,85 @@ export default function InterviewPage() {
 
   useEffect(() => {
   const loadVoices = () => {
-    console.log("Available voices:", speechSynthesis.getVoices())
+    // console.log("Available voices:", speechSynthesis.getVoices())
   }
   loadVoices()
   window.speechSynthesis.onvoiceschanged = loadVoices
 }, [])
+
+
+
+// const speakText = useCallback(
+//   (text) => {
+//     if ("speechSynthesis" in window) {
+//       speechSynthesis.cancel();
+//       const utterance = new SpeechSynthesisUtterance(text);
+//       const voices = speechSynthesis.getVoices();
+//       const personality = interviewerPersonalities.find(
+//         (p) => p.value === selectedPersonality
+//       );
+
+//       // ✅ Prioritize Indian female voice
+//       const selectedVoice =
+//         voices.find(
+//           (voice) =>
+//             voice.lang.toLowerCase().includes("en-in") &&
+//             (voice.name.toLowerCase().includes("female") ||
+//               voice.name.toLowerCase().includes("woman") ||
+//               voice.name.toLowerCase().includes("woman") ||
+//               voice.name.toLowerCase().includes("girl"))
+//         ) ||
+//         // ✅ fallback: any female voice
+//         voices.find(
+//           (voice) =>
+//             voice.name.toLowerCase().includes("female") ||
+//             voice.name.toLowerCase().includes("woman") ||
+//             voice.name.toLowerCase().includes("girl")
+//         ) ||
+//         // ✅ fallback: any Indian voice
+//         voices.find((voice) => voice.lang.toLowerCase().includes("en-in")) ||
+//         // ✅ ultimate fallback: first available voice
+//         voices[0];
+
+//       if (personality) {
+//         utterance.pitch = personality.voice.pitch;
+//         utterance.rate = speechRate[0];
+//         utterance.volume = speechVolume[0];
+//       }
+
+//       utterance.voice = selectedVoice;
+
+//       utterance.onstart = () => {
+//         setIsSpeaking(true);
+//         setAvatarState((prev) => ({
+//           ...prev,
+//           isSpeaking: true,
+//           emotion: personality?.avatar.emotion || "neutral",
+//         }));
+//       };
+
+//       utterance.onend = () => {
+//         setIsSpeaking(false);
+//         setAvatarState((prev) => ({
+//           ...prev,
+//           isSpeaking: false,
+//           emotion: "neutral",
+//         }));
+//       };
+
+//       utterance.onerror = () => {
+//         setIsSpeaking(false);
+//         setAvatarState((prev) => ({
+//           ...prev,
+//           isSpeaking: false,
+//         }));
+//       };
+
+//       speechSynthesis.speak(utterance);
+//     }
+//   },
+//   [selectedPersonality, speechVolume, speechRate]
+// );
 
 
   const speakText = useCallback(
@@ -179,11 +254,12 @@ export default function InterviewPage() {
         const utterance = new SpeechSynthesisUtterance(text)
         const voices = speechSynthesis.getVoices()
         const personality = interviewerPersonalities.find((p) => p.value === selectedPersonality)
-
-        const selectedVoice =
-          voices.find(
-            (voice) => voice.name.toLowerCase().includes("female") || voice.name.toLowerCase().includes("male"),
-          ) || voices[0]
+        console.log("Available voices:", voices)
+        // const selectedVoice =
+        //   voices.find(
+        //     (voice) => voice.name.toLowerCase().includes("female") || voice.name.toLowerCase().includes("male"),
+        //   ) || voices[0]
+        const selectedVoice = voices[2] ? voices[2] : 'Microsoft Neerja Online (Natural) - English (India)';  //voices.find((voice) => voice.name === 'Microsoft Neerja Online (Natural) - English (India)') || voices[2]
 
         if (personality) {
           utterance.pitch = personality.voice.pitch
@@ -291,7 +367,7 @@ export default function InterviewPage() {
 
   const generateQuestion = async (context = "", currentConversation = null) => {
     setIsLoading(true)
-    setAvatarState((prev) => ({ ...prev, emotion: "thinking" }))
+    // setAvatarState((prev) => ({ ...prev, emotion: "neutral" }))
 
     const conversationToSend = currentConversation ?? conversationRef.current
     console.log("conversation in generateQuestion (len):", conversationToSend.length)
@@ -311,6 +387,7 @@ export default function InterviewPage() {
       })
 
       const data = await response.json()
+      console.log(data)
       if (data.question) {
         const newQuestion = data.question
         setCurrentQuestion(newQuestion)
@@ -319,17 +396,18 @@ export default function InterviewPage() {
 
         conversationRef.current = nextConversation
         setConversation(nextConversation)
-
-        setQuestionCount((prev) => {
-          const newCount = prev + 1
-          localStorage.setItem("questionCount", String(newCount))
-          return newCount
-        })
+        if(data.questionCountShouldIncrement) {
+          setQuestionCount((prev) => {
+            const newCount = prev + 1
+            localStorage.setItem("questionCount", String(newCount))
+            return newCount
+          })
+       }
       if (data.scores) {
         setAllScores((prev) => [...prev, data.scores])
       }
 
-
+        setAvatarState((prev) => ({ ...prev, emotion: data.emotion || "neutral" }))
         setTimeout(() => {
           speakText(newQuestion)
         }, 500)
@@ -338,7 +416,7 @@ export default function InterviewPage() {
       console.error("Error generating question:", error)
     } finally {
       setIsLoading(false)
-      setAvatarState((prev) => ({ ...prev, emotion: "neutral" }))
+      // setAvatarState((prev) => ({ ...prev, emotion: "neutral" }))
     }
   }
 
@@ -374,7 +452,7 @@ export default function InterviewPage() {
 
   const startInterview = () => {
     setIsInterviewStarted(true)
-    setAvatarState((prev) => ({ ...prev, emotion: "welcoming" }))
+    setAvatarState((prev) => ({ ...prev, emotion: "neutral" }))
 
     const welcomeMessage = `Hello ${resumeData?.fullName || "there"}! I'm excited to interview you for the ${resumeData?.roleAppliedFor} position. Let's begin with our first question.`
 
@@ -388,7 +466,7 @@ export default function InterviewPage() {
 
   const endInterview = () => {
     setIsInterviewStarted(false)
-    setAvatarState((prev) => ({ ...prev, emotion: "satisfied" }))
+    setAvatarState((prev) => ({ ...prev, emotion: "happy" }))
 
     const closingMessage = "Thank you for your time today. I'll now prepare your detailed feedback report."
     speakText(closingMessage)
@@ -469,7 +547,7 @@ export default function InterviewPage() {
             </Button>
 
             <div className="flex items-center space-x-4">
-              <InterviewProgress current={questionCount} total={8} isActive={isInterviewStarted} />
+              <InterviewProgress current={questionCount} total={5} isActive={isInterviewStarted} />
 
               <Select value={selectedPersonality} onValueChange={handlePersonalityChange}>
                 <SelectTrigger className="w-48 bg-white/10 border-white/20 text-white backdrop-blur-sm">
@@ -665,6 +743,7 @@ export default function InterviewPage() {
 
                 <div className="aspect-video bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg overflow-hidden">
                   <RealisticAIAvatar
+                    speechRate={speechRate}
                     personality={selectedPersonality}
                     isSpeaking={isSpeaking}
                     isLoading={isLoading}
@@ -672,6 +751,14 @@ export default function InterviewPage() {
                     eyeDirection={avatarState.eyeDirection}
                     currentText={currentQuestion}
                   />
+                  {/* <AIAvatar
+                    personality={selectedPersonality}
+                    isSpeaking={true}
+                    isLoading={isLoading}
+                    emotion={avatarState.emotion}
+                    eyeDirection={avatarState.eyeDirection}
+                    currentText={currentQuestion}
+                  /> */}
                 </div>
               </CardContent>
             </Card>
