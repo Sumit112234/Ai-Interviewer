@@ -26,7 +26,6 @@ import RealisticAIAvatar from "@/components/RealisticAiAvatar"
 import EnhancedSpeechRecognition from "@/components/EnhancedSpeechRecognition"
 import InterviewProgress from "@/components/InterviewProgress"
 import AIAvatar from "@/components/AIAvatar"
-
 export default function InterviewPage() {
   const router = useRouter()
   const videoRef = useRef(null)

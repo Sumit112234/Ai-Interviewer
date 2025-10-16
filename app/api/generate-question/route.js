@@ -480,15 +480,15 @@ REMEMBER:
     try {
       parsed = JSON.parse(extractJson(text))
     } catch (e) {
-      console.error("[v0] JSON parse failed, raw text:", text)
+      console.log("JSON parse failed, raw text:", text)
       return Response.json({ error: "Model returned invalid JSON." }, { status: 500 })
     }
 
-    console.log('parsed question:', parsed , ' from text:', text)
+    console.log('parsed question:', parsed )
 
-    if (!parsed?.nextQuestion) {
-      return Response.json({ error: "Model did not provide nextQuestion." }, { status: 500 })
-    }
+    // if (!parsed?.nextQuestion) {
+    //   return Response.json({ error: "Model did not provide nextQuestion." }, { status: 500 })
+    // }
 
     const lastUserNonEmpty = typeof lastUser === "string" && lastUser.trim().length > 0
 
@@ -525,6 +525,8 @@ REMEMBER:
 
      const shouldIncrement = parsed.questionCountShouldIncrement !== false && !computedCrossQuestion
     // Backward-compatible response while adding rich metadata
+
+    console.log( parsed.nextQuestion, computedCrossQuestion )
     return Response.json({
       question: parsed.nextQuestion ?? computedCrossQuestion ?? "Could you please elaborate?",
       crossQuestion: computedCrossQuestion,

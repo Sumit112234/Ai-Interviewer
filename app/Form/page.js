@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Moon, Sun, User, Briefcase, GraduationCap, Code, Target, Sparkles, Zap, Brain } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { getUser } from "../context/auth"
 
 export default function Form() {
   const router = useRouter()
@@ -23,6 +24,34 @@ export default function Form() {
     roleAppliedFor: "",
     otherDetails: "",
   })
+
+  const [user, setUser] = useState(null)
+  
+    useEffect(() => {
+      async function fetchUser() {
+        const userData = await getUser()
+        setUser(userData?.user || null)
+      }
+      fetchUser()
+    },[])
+
+    useEffect(()=>{
+      if(!user) return ;
+
+      console.log('coming here : ',user.name, user?.user?.name)
+      setFormData({
+        fullName:  user.name || "",
+        education: Array.isArray(user.education) ? user.education.join(", ") : user.education || "",
+        workExperience: Array.isArray(user.workExperience) ? user.workExperience.join(", ") : user.workExperience || "",
+        projects: Array.isArray(user.projects) ? user.projects.join(", ") : user.projects || "",
+        skills: Array.isArray(user.skills) ? user.skills.join(", ") : user.skills || "",
+        roleAppliedFor: Array.isArray(user.role) ? user.role.join(", ") : user.role || "",
+        otherDetails: Array.isArray(user.additionalInfo) ? user.additionalInfo.join(", ") : user.additionalInfo || "",
+      })
+
+
+    },[user])
+  
   
   const [focusedField, setFocusedField] = useState(null)
   const [completedFields, setCompletedFields] = useState(new Set())
@@ -45,11 +74,31 @@ export default function Form() {
     }
   }
 
-  const handleStartInterview = () => {
-    // In real app, would save to localStorage and navigate
-    localStorage.setItem("resumeData", JSON.stringify(formData))
-    router.push("/interview")
-    console.log("Interview started with data:", formData)
+  const handleStartInterview = async () => {
+    console.log("Form Data Submitted:", formData, user)
+ 
+    if(!isFormValid) alert("Please fill in all required fields")
+    try{
+      const res = await fetch('/api/auth/update',{
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(formData)
+      })
+
+      if(!res.ok) throw new Error('Failed to update user')
+      const data = await res.json()
+      console.log('User updated:',data.user)
+
+      localStorage.setItem("resumeData", JSON.stringify(formData))
+      router.push("/interview")
+      console.log("Interview started with data:", formData)
+    }
+    catch(e){
+      alert('unable to update user!')
+    }
+
   }
 
   const isFormValid =

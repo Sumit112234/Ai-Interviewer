@@ -20,11 +20,15 @@ import {
   BarChart3,
   Shield,
   Clock,
-  Award
+  Award,
+  LogOut
 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { getUser } from "../context/auth"
 
 export default function Dashboard() {
+
+
   const [theme, setTheme] = useState("light")
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
@@ -78,11 +82,32 @@ export default function Dashboard() {
     }
   }
   const router = useRouter()
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    async function fetchUser() {
+      const userData = await getUser()
+      setUser(userData)
+    }
+    fetchUser()
+  },[])
+
+  const handelLogOut = async()=>{
+    await fetch('/api/auth/logout',{ method: 'POST' })
+    router.push("/login")
+  }
 
   const handleGetStarted = () => {
-    localStorage.removeItem('questionCount')
-    router.push("/Form")
-    console.log("Navigating to /form")
+    console.log(user)
+    if(!user)
+    {
+      router.push("/login")
+    }
+    else{
+      localStorage.removeItem('questionCount')
+      router.push("/Form")
+      console.log("Navigating to /form")
+    }
   }
 
   return (
@@ -150,6 +175,20 @@ export default function Dashboard() {
           </motion.div>
           
           <motion.div className="flex items-center gap-4">
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => handelLogOut()}
+                className="bg-white/20 hover:bg-white/30 border border-white/30"
+              >
+                  <LogOut className="h-5 w-5 text-yellow-300" /> : 
+               
+              </Button>
+            </motion.div>
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
