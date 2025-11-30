@@ -5,7 +5,7 @@ import User from "@/models/User"
 import { verifyToken } from "@/lib/auth"
 
 const AUTH_COOKIE = "auth_token"
-const ALLOWED_FIELDS = ["name", "role", "education", "workExperience", "projects", "skills", "additionalInfo"]
+const ALLOWED_FIELDS = ["name", "role", "education", "phone", "workExperience", "projects", "skills", "additionalInfo"]
 
 
 export async function PUT(request) {

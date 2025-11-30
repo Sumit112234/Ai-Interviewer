@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
     lowercase: true,
     trim: true
   },
+  phone : {
+    type : String
+  },
   password: {
     type: String,
     required: [true, 'Please provide a password'],

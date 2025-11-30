@@ -93,8 +93,8 @@ export default function Dashboard() {
   },[])
 
   const handelLogOut = async()=>{
-    await fetch('/api/auth/logout',{ method: 'POST' })
     router.push("/login")
+    await fetch('/api/auth/logout',{ method: 'POST' })
   }
 
   const handleGetStarted = () => {
@@ -185,11 +185,11 @@ export default function Dashboard() {
                 onClick={() => handelLogOut()}
                 className="bg-white/20 hover:bg-white/30 border border-white/30"
               >
-                  <LogOut className="h-5 w-5 text-yellow-300" /> : 
+                  <LogOut className="h-5 w-5 text-yellow-300" /> 
                
               </Button>
             </motion.div>
-            <motion.div
+            {/* <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -204,7 +204,7 @@ export default function Dashboard() {
                   <Moon className="h-5 w-5 text-purple-200" />
                 }
               </Button>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         </div>
       </motion.header>
@@ -290,6 +290,14 @@ export default function Dashboard() {
                 variant="outline"
                 className="bg-white/20 hover:bg-white/30 border-2 border-white/50 hover:border-white/70 text-white px-8 py-6 text-lg font-semibold backdrop-blur-sm"
                 size="lg"
+                onClick={() => {
+                  window.open('https://sumitbaghelportfolio.netlify.app', '_blank');
+                }}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  navigator.clipboard.writeText('https://sumitbaghelportfolio.netlify.app');
+                  alert('Link copied to clipboard!');
+                }}
               >
                 Watch Demo
               </Button>

@@ -27,6 +27,7 @@ import EnhancedSpeechRecognition from "@/components/EnhancedSpeechRecognition"
 import InterviewProgress from "@/components/InterviewProgress"
 import AIAvatar from "@/components/AIAvatar"
 export default function InterviewPage() {
+
   const router = useRouter()
   const videoRef = useRef(null)
   const mediaStreamRef = useRef(null)
@@ -171,81 +172,6 @@ export default function InterviewPage() {
   window.speechSynthesis.onvoiceschanged = loadVoices
 }, [])
 
-
-
-// const speakText = useCallback(
-//   (text) => {
-//     if ("speechSynthesis" in window) {
-//       speechSynthesis.cancel();
-//       const utterance = new SpeechSynthesisUtterance(text);
-//       const voices = speechSynthesis.getVoices();
-//       const personality = interviewerPersonalities.find(
-//         (p) => p.value === selectedPersonality
-//       );
-
-//       // ✅ Prioritize Indian female voice
-//       const selectedVoice =
-//         voices.find(
-//           (voice) =>
-//             voice.lang.toLowerCase().includes("en-in") &&
-//             (voice.name.toLowerCase().includes("female") ||
-//               voice.name.toLowerCase().includes("woman") ||
-//               voice.name.toLowerCase().includes("woman") ||
-//               voice.name.toLowerCase().includes("girl"))
-//         ) ||
-//         // ✅ fallback: any female voice
-//         voices.find(
-//           (voice) =>
-//             voice.name.toLowerCase().includes("female") ||
-//             voice.name.toLowerCase().includes("woman") ||
-//             voice.name.toLowerCase().includes("girl")
-//         ) ||
-//         // ✅ fallback: any Indian voice
-//         voices.find((voice) => voice.lang.toLowerCase().includes("en-in")) ||
-//         // ✅ ultimate fallback: first available voice
-//         voices[0];
-
-//       if (personality) {
-//         utterance.pitch = personality.voice.pitch;
-//         utterance.rate = speechRate[0];
-//         utterance.volume = speechVolume[0];
-//       }
-
-//       utterance.voice = selectedVoice;
-
-//       utterance.onstart = () => {
-//         setIsSpeaking(true);
-//         setAvatarState((prev) => ({
-//           ...prev,
-//           isSpeaking: true,
-//           emotion: personality?.avatar.emotion || "neutral",
-//         }));
-//       };
-
-//       utterance.onend = () => {
-//         setIsSpeaking(false);
-//         setAvatarState((prev) => ({
-//           ...prev,
-//           isSpeaking: false,
-//           emotion: "neutral",
-//         }));
-//       };
-
-//       utterance.onerror = () => {
-//         setIsSpeaking(false);
-//         setAvatarState((prev) => ({
-//           ...prev,
-//           isSpeaking: false,
-//         }));
-//       };
-
-//       speechSynthesis.speak(utterance);
-//     }
-//   },
-//   [selectedPersonality, speechVolume, speechRate]
-// );
-
-
   const speakText = useCallback(
     (text) => {
       if ("speechSynthesis" in window) {
@@ -300,68 +226,6 @@ export default function InterviewPage() {
     [selectedPersonality, speechVolume, speechRate],
   )
 
-//    const speakText = useCallback(
-//   (text) => {
-//     if ("speechSynthesis" in window) {
-//       speechSynthesis.cancel()
-//       const utterance = new SpeechSynthesisUtterance(text)
-//       const voices = speechSynthesis.getVoices()
-//       const personality = interviewerPersonalities.find((p) => p.value === selectedPersonality)
-
-//       const indianFemaleVoices = [
-//         "Microsoft Heera - English (India)", // Windows
-//         "Sangeeta", // macOS
-//         "Veena",    // macOS (sometimes available)
-//         "Google हिन्दी", // Android Chrome
-//       ]
-
-//       const selectedVoice =
-//         voices.find((voice) =>
-//           indianFemaleVoices.some((name) => voice.name.toLowerCase().includes(name.toLowerCase()))
-//         ) ||
-//         voices.find((voice) => voice.lang.toLowerCase().includes("en-in")) || // any Indian voice
-//         voices.find((voice) => voice.name.toLowerCase().includes("female")) || // fallback female
-//         voices[0] // ultimate fallback
-
-//       if (personality) {
-//         utterance.pitch = personality.voice.pitch
-//         utterance.rate = speechRate[0]
-//         utterance.volume = speechVolume[0]
-//       }
-
-//       utterance.voice = selectedVoice
-
-//       utterance.onstart = () => {
-//         setIsSpeaking(true)
-//         setAvatarState((prev) => ({
-//           ...prev,
-//           isSpeaking: true,
-//           emotion: personality?.avatar.emotion || "neutral",
-//         }))
-//       }
-
-//       utterance.onend = () => {
-//         setIsSpeaking(false)
-//         setAvatarState((prev) => ({
-//           ...prev,
-//           isSpeaking: false,
-//           emotion: "neutral",
-//         }))
-//       }
-
-//       utterance.onerror = () => {
-//         setIsSpeaking(false)
-//         setAvatarState((prev) => ({
-//           ...prev,
-//           isSpeaking: false,
-//         }))
-//       }
-
-//       speechSynthesis.speak(utterance)
-//     }
-//   },
-//   [selectedPersonality, speechVolume, speechRate],
-// )
 
 
   const generateQuestion = async (context = "", currentConversation = null) => {

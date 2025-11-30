@@ -335,7 +335,7 @@ export async function POST(request) {
       return Response.json({ error: "conversation must be an array of {role, content}" }, { status: 400 })
     }
 
-    console.log("[v0] POST /api/generate-question", {
+    console.log(" POST /api/generate-question", {
       conversationLength: conversation.length,
       questionCount,
       hasResume: !!resumeData,
