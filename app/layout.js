@@ -5,7 +5,10 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "AI Resume Interviewer",
+  icons: {
+    icon: '/favicon.png',
+  },
+  title: "AI Interviewer",
   description: "Practice your interview skills with AI-powered personalized questions",
 }
 
