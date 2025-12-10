@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation"
 import RealisticAIAvatar from "@/components/RealisticAiAvatar"
 import EnhancedSpeechRecognition from "@/components/EnhancedSpeechRecognition"
 import InterviewProgress from "@/components/InterviewProgress"
-import CodeIDETestModal from "./CodeIDETestModal.jsx"
+import CodeIDETestModal from "../../../components/CodeIDETestModal.jsx"
 
 export default function InterviewTestPage() {
   const router = useRouter()
@@ -58,6 +58,11 @@ export default function InterviewTestPage() {
   })
   const [allScores, setAllScores] = useState([])
   const [questionCount, setQuestionCount] = useState(0)
+  const [ideStatus, setIdeStatus] = useState(true)
+
+  const onIdeSubmit = async (codeSnippet, language) => {
+    alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
+  }
 
   useEffect(() => {
     conversationRef.current = conversation
@@ -419,7 +424,7 @@ export default function InterviewTestPage() {
       <main className="container mx-auto px-4 py-6 h-[calc(100vh-80px)]">
         {/* Code IDE Button - Floating */}
         <div className="absolute top-20 right-8 z-50">
-          <CodeIDETestModal />
+          <CodeIDETestModal onIdeSubmit={onIdeSubmit} ideStatus={ideStatus} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full max-w-7xl mx-auto">

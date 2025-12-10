@@ -26,6 +26,7 @@ import RealisticAIAvatar from "@/components/RealisticAiAvatar"
 import EnhancedSpeechRecognition from "@/components/EnhancedSpeechRecognition"
 import InterviewProgress from "@/components/InterviewProgress"
 import AIAvatar from "@/components/AIAvatar"
+import CodeIDETestModal from "@/components/CodeIDETestModal"
 export default function InterviewPage() {
 
   const router = useRouter()
@@ -58,6 +59,19 @@ export default function InterviewPage() {
   })
   const [allScores, setAllScores] = useState([])
   const [questionCount, setQuestionCount] = useState(0)
+  const [ideStatus, setIdeStatus] = useState(true)
+
+  const onIdeSubmit = async (codeSnippet, language, skip=false) => {
+    if(skip)
+    {
+
+    }
+    else{
+
+    }
+    alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
+  }
+
 
   useEffect(() => {
     conversationRef.current = conversation
@@ -249,6 +263,7 @@ export default function InterviewPage() {
         }),
       })
 
+
       const data = await response.json()
       console.log(data)
       if (data.question) {
@@ -431,6 +446,9 @@ export default function InterviewPage() {
       </header>
 
       <main className="container mx-auto px-4 py-6 h-[calc(100vh-80px)]">
+       <div className="absolute top-20 right-8 z-50">
+           <CodeIDETestModal onIdeSubmit={onIdeSubmit} ideStatus={ideStatus} />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -50 }}

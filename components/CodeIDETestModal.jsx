@@ -4,8 +4,8 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Code, Play } from "lucide-react"
 
-export default function CodeIDETestModal() {
-  const [isOpen, setIsOpen] = useState(false)
+export default function CodeIDETestModal({ onIdeSubmit, ideStatus }) {
+  const [isOpen, setIsOpen] = useState(ideStatus)
   const [code, setCode] = useState(`// Write your code here
 function solution() {
   // Your implementation
@@ -26,13 +26,13 @@ solution();`)
   return (
     <div className="p-8">
       {/* Trigger Button */}
-      <button
+      {/* <button
         onClick={openModal}
         className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 flex items-center space-x-2"
       >
         <Code className="h-5 w-5" />
         <span>Open Code IDE</span>
-      </button>
+      </button> */}
 
       {/* Modal Overlay and Content */}
       <AnimatePresence>
