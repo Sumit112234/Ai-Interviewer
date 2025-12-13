@@ -61,7 +61,22 @@ export default function InterviewTestPage() {
   const [ideStatus, setIdeStatus] = useState(true)
 
   const onIdeSubmit = async (codeSnippet, language) => {
-    alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
+    console.log("💻 Code submitted:", codeSnippet, language)
+    
+    // Format code response for conversation
+    const codeResponse = `[CODE SUBMITTED]\nLanguage: ${language || 'Unknown'}\nCode:\n${codeSnippet}`
+    
+    // Close the IDE and add response to conversation
+    setIdeStatus(false)
+    handleUserResponse(codeResponse, 1.0)
+  }
+  
+  const onIdeTimeout = () => {
+    console.log("⏰ IDE Timer expired - sending 'I don't know'")
+    
+    // Close the IDE and send "I don't know" as response
+    setIdeStatus(false)
+    handleUserResponse("I don't know", 0.3)
   }
 
   useEffect(() => {
@@ -237,12 +252,15 @@ export default function InterviewTestPage() {
           conversation: conversationToSend,
           conver: conversationToSend,
           questionCount: Number.parseInt(localStorage.getItem("questionCount") || "0", 10),
+          codingQuestionsAsked: 0,
           context,
           personality: selectedPersonality,
         }),
       })
 
       const data = await response.json()
+      console.log("📨 API Response:", data)
+      
       if (data.question) {
         const newQuestion = data.question
         setCurrentQuestion(newQuestion)
@@ -265,6 +283,15 @@ export default function InterviewTestPage() {
         }
 
         setAvatarState((prev) => ({ ...prev, emotion: data.emotion || "neutral" }))
+        
+        // Check if this is a coding question - SET IDE STATUS TRUE
+        if (data.ide === true) {
+          console.log("🎯 Coding question detected! Setting ideStatus to true", data)
+          setIdeStatus(true)
+        } else {
+          setIdeStatus(false)
+        }
+        
         setTimeout(() => {
           speakText(newQuestion)
         }, 500)
@@ -424,7 +451,11 @@ export default function InterviewTestPage() {
       <main className="container mx-auto px-4 py-6 h-[calc(100vh-80px)]">
         {/* Code IDE Button - Floating */}
         <div className="absolute top-20 right-8 z-50">
-          <CodeIDETestModal onIdeSubmit={onIdeSubmit} ideStatus={ideStatus} />
+          <CodeIDETestModal 
+            onIdeSubmit={onIdeSubmit} 
+            ideStatus={ideStatus} 
+            onIdeTimeout={onIdeTimeout}
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full max-w-7xl mx-auto">

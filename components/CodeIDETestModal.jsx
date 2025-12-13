@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Code, Play } from "lucide-react"
+import { X, Code, Play, Clock, AlertCircle } from "lucide-react"
 
-export default function CodeIDETestModal({ onIdeSubmit, ideStatus }) {
-  const [isOpen, setIsOpen] = useState(ideStatus)
+export default function CodeIDETestModal({ onIdeSubmit, ideStatus, onIdeTimeout }) {
+  const [isOpen, setIsOpen] = useState(false)
   const [code, setCode] = useState(`// Write your code here
 function solution() {
   // Your implementation
@@ -13,14 +13,81 @@ function solution() {
 }
 
 solution();`)
+  
+  const [timeRemaining, setTimeRemaining] = useState(600) // 10 minutes in seconds
+  const [isTimerActive, setIsTimerActive] = useState(false)
 
-  const openModal = () => setIsOpen(true)
-  const closeModal = () => setIsOpen(false)
+  // Sync with ideStatus prop
+  useEffect(() => {
+    if (ideStatus && !isOpen) {
+      setIsOpen(true)
+      setTimeRemaining(600) // Reset to 10 minutes
+      setIsTimerActive(true)
+      setCode(`// Write your code here
+function solution() {
+  // Your implementation
+  
+}
+
+solution();`)
+    }
+  }, [ideStatus])
+
+  // Timer effect
+  useEffect(() => {
+    let interval = null
+    if (isTimerActive && timeRemaining > 0) {
+      interval = setInterval(() => {
+        setTimeRemaining((time) => {
+          if (time <= 1) {
+            setIsTimerActive(false)
+            handleTimeout()
+            return 0
+          }
+          return time - 1
+        })
+      }, 1000)
+    }
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [isTimerActive, timeRemaining])
+
+  const closeModal = () => {
+    setIsOpen(false)
+    setIsTimerActive(false)
+  }
+
+  const handleTimeout = () => {
+    console.log("⏰ Timer expired!")
+    closeModal()
+    // Call the timeout handler from parent to send "I don't know"
+    if (onIdeTimeout) {
+      onIdeTimeout()
+    }
+  }
 
   const handleSubmit = () => {
     console.log("Code submitted:", code)
-    alert("Code submitted successfully!")
+    setIsTimerActive(false)
     closeModal()
+    // Call the submit handler from parent
+    if (onIdeSubmit) {
+      onIdeSubmit(code, "javascript")
+    }
+  }
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const getTimerColor = () => {
+    const percentage = (timeRemaining / 600) * 100
+    if (percentage > 50) return "text-green-400"
+    if (percentage > 25) return "text-yellow-400"
+    return "text-red-400"
   }
 
   return (
@@ -67,14 +134,26 @@ solution();`)
                     <h2 className="text-xl font-bold text-white">Coding Challenge</h2>
                   </div>
                   
-                  {/* Close Button */}
-                  <button
-                    onClick={closeModal}
-                    className="p-2 hover:bg-gray-700 rounded-lg transition-colors duration-200 text-gray-400 hover:text-white"
-                    aria-label="Close modal"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
+                  <div className="flex items-center space-x-4">
+                    {/* Timer Display */}
+                    <div className={`flex items-center space-x-2 px-4 py-2 bg-gray-900/50 rounded-lg border ${
+                      timeRemaining < 60 ? 'border-red-500/50 animate-pulse' : 'border-gray-600'
+                    }`}>
+                      <Clock className={`h-5 w-5 ${getTimerColor()}`} />
+                      <span className={`font-mono text-lg font-bold ${getTimerColor()}`}>
+                        {formatTime(timeRemaining)}
+                      </span>
+                    </div>
+                    
+                    {/* Close Button */}
+                    <button
+                      onClick={closeModal}
+                      className="p-2 hover:bg-gray-700 rounded-lg transition-colors duration-200 text-gray-400 hover:text-white"
+                      aria-label="Close modal"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Code Editor Area */}
@@ -114,6 +193,20 @@ solution();`)
                       Click "Submit Code" when you're ready to submit your answer.
                     </p>
                   </div>
+
+                  {/* Time Warning */}
+                  {timeRemaining < 60 && timeRemaining > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 p-3 bg-red-900/30 border border-red-500/50 rounded-lg flex items-center space-x-2"
+                    >
+                      <Clock className="h-5 w-5 text-red-400 animate-pulse" />
+                      <p className="text-sm text-red-200 font-medium">
+                        Less than 1 minute remaining! Your response will be submitted as "I don't know" when time runs out.
+                      </p>
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Footer with Actions */}
