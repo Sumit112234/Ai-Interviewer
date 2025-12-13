@@ -27,6 +27,7 @@ import EnhancedSpeechRecognition from "@/components/EnhancedSpeechRecognition"
 import InterviewProgress from "@/components/InterviewProgress"
 import AIAvatar from "@/components/AIAvatar"
 import CodeIDETestModal from "@/components/CodeIDETestModal"
+
 export default function InterviewPage() {
 
   const router = useRouter()
@@ -59,16 +60,16 @@ export default function InterviewPage() {
   })
   const [allScores, setAllScores] = useState([])
   const [questionCount, setQuestionCount] = useState(0)
-  const [ideStatus, setIdeStatus] = useState(true)
+  const [ideData, setIdeData] = useState({ideStatus : false, question: "Implement a function to reverse a linked list.", codeType : "write"})
 
   const onIdeSubmit = async (codeSnippet, language, skip=false) => {
     if(skip)
     {
-
+      await handleUserResponse(`I am skipping the coding question because it is so difficult.`, 1.0)
     }
     else{
-
-    }
+      await handleUserResponse(`Here is my code submission for the coding challenge:\n\n${codeSnippet}\n\nLanguage: ${language}`, 1.0)
+    } 
     alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
   }
 
@@ -270,7 +271,19 @@ export default function InterviewPage() {
         const newQuestion = data.question
         setCurrentQuestion(newQuestion)
 
+        if(data.ide)
+        {
+
+          console.log(data.ide,data.question,data.codeType,data.codeSnippet)
+          setIdeData({
+            ideStatus : data.ide,
+            question : data.codeSnippet || data.question,
+            codeType : data.codeType
+          })
+        }
+
         const nextConversation = [...conversationToSend, { type: "ai", content: newQuestion, timestamp: Date.now() }]
+
 
         conversationRef.current = nextConversation
         setConversation(nextConversation)
@@ -447,7 +460,7 @@ export default function InterviewPage() {
 
       <main className="container mx-auto px-4 py-6 h-[calc(100vh-80px)]">
        <div className="absolute top-20 right-8 z-50">
-           <CodeIDETestModal onIdeSubmit={onIdeSubmit} ideStatus={ideStatus} />
+           <CodeIDETestModal onIdeSubmit={onIdeSubmit} data={ideData}  />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full max-w-7xl mx-auto">
           <motion.div
