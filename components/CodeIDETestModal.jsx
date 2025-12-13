@@ -4,8 +4,10 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Code, Play, SkipForward, Sparkles, Zap, CheckCircle } from "lucide-react"
 
-export default function CodeIDETestModal({ onIdeSubmit, data }) {
-  const [isOpen, setIsOpen] = useState(data.ideStatus)
+export default function CodeIDETestModal({ onIdeSubmit, data, setIdeData }) {
+
+  // console.log("IDE Modal Data:", data)
+  const [isOpen, setIsOpen] = useState(true)
   const [code, setCode] = useState("")
   const [language, setLanguage] = useState("javascript")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -37,7 +39,11 @@ export default function CodeIDETestModal({ onIdeSubmit, data }) {
     }
   }, [language, data.codeType])
 
-  const closeModal = () => setIsOpen(false)
+  const closeModal = () => {
+          setIdeData({
+            ideStatus : false
+          })
+  }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -47,13 +53,13 @@ export default function CodeIDETestModal({ onIdeSubmit, data }) {
     setShowSuccess(true)
     setTimeout(() => {
       setShowSuccess(false)
-      closeModal()
+       closeModal()
     }, 1500)
   }
 
   const handleSkip = async () => {
     await onIdeSubmit("", language, true)
-    closeModal()
+     closeModal()
   }
 
   const getLineNumbers = () => {
@@ -72,7 +78,7 @@ export default function CodeIDETestModal({ onIdeSubmit, data }) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="fixed inset-0 bg-black/70 backdrop-blur-md z-[9999]"
-              onClick={closeModal}
+              onClick={handleSubmit}
             />
 
             {/* Modal Container */}

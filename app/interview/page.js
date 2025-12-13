@@ -37,6 +37,8 @@ export default function InterviewPage() {
   const analyserRef = useRef(null)
   const conversationRef = useRef([]) 
 
+
+
   const [resumeData, setResumeData] = useState(null)
   const [isInterviewStarted, setIsInterviewStarted] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState("")
@@ -60,19 +62,29 @@ export default function InterviewPage() {
   })
   const [allScores, setAllScores] = useState([])
   const [questionCount, setQuestionCount] = useState(0)
+  const [showIde, setShowIde] = useState(false)
   const [ideData, setIdeData] = useState({ideStatus : false, question: "Implement a function to reverse a linked list.", codeType : "write"})
 
   const onIdeSubmit = async (codeSnippet, language, skip=false) => {
     if(skip)
     {
       await handleUserResponse(`I am skipping the coding question because it is so difficult.`, 1.0)
+      // setShowIde(false)
     }
     else{
-      await handleUserResponse(`Here is my code submission for the coding challenge:\n\n${codeSnippet}\n\nLanguage: ${language}`, 1.0)
+      await handleUserResponse(`Here is my code submission for the coding challenge:\n\n${codeSnippet}\n\nLanguage: ${language}`, 1.0,true)
+      // setShowIde(false)
     } 
-    alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
+    // alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
   }
 
+  
+  useEffect(()=>{
+    if(ideData.ideStatus === false)
+    {
+      setShowIde(false)
+    }
+  },[ideData])
 
   useEffect(() => {
     conversationRef.current = conversation
@@ -275,6 +287,7 @@ export default function InterviewPage() {
         {
 
           console.log(data.ide,data.question,data.codeType,data.codeSnippet)
+          setShowIde(true)
           setIdeData({
             ideStatus : data.ide,
             question : data.codeSnippet || data.question,
@@ -311,7 +324,7 @@ export default function InterviewPage() {
     }
   }
 
-  const handleUserResponse = async (response, confidence = 1.0) => {
+  const handleUserResponse = async (response, confidence = 1.0, isIde = false) => {
     console.log("conversation from handler (len):", conversationRef.current.length)
     if (!response?.trim()) return
 
@@ -328,7 +341,15 @@ export default function InterviewPage() {
     const next = [...base, userMsg]
 
     conversationRef.current = next
-    setConversation(next)
+
+    if(isIde)
+    {
+      // setIdeData({ideStatus : false, question: "", codeType : ""})
+      setConversation([...next, { type: "user", content: "Your submitted code has been recorded.", timestamp: Date.now(), confidence: 1.0 }])
+    }
+    else{
+      setConversation(next)
+    }
 
     setTimeout(() => {
       setIsProcessingResponse(false)
@@ -459,9 +480,9 @@ export default function InterviewPage() {
       </header>
 
       <main className="container mx-auto px-4 py-6 h-[calc(100vh-80px)]">
-       <div className="absolute top-20 right-8 z-50">
-           <CodeIDETestModal onIdeSubmit={onIdeSubmit} data={ideData}  />
-        </div>
+       { showIde && <div className="absolute top-20 right-8 z-50">
+           <CodeIDETestModal onIdeSubmit={onIdeSubmit} data={ideData}  setIdeData={setIdeData} />
+        </div>}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
