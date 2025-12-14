@@ -1072,6 +1072,7 @@ REMEMBER:
       notes: parsed.notes || "",
       totals: aggregated,
       emotion,
+      time: parsed.time , // default times,
       questionCountShouldIncrement: shouldIncrement,
       ide,
       codeType,
