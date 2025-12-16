@@ -947,7 +947,7 @@ Return ONLY valid JSON with this EXACT structure:
   "followUpTopics": string[],
   "selectionFlags": string[],
   "memoryUpdates": string[],
-  "time": string, (user can take time to answer the question in seconds and if coding question then give him at least 300 seconds)
+  "time": string, (time required to answer the question in seconds and if coding question then provide at least 300 seconds)
   "emotion": "neutral | happy | angry" (based on candidate's last response)
   "questionCountShouldIncrement": boolean, (true if new question; false for cross-question)
   "ide": boolean, (true if coding question requiring IDE; false otherwise)
@@ -1057,7 +1057,7 @@ REMEMBER:
       codeType,
       hasCodeSnippet: !!codeSnippet,
       expectedLanguage,
-      shouldIncrement
+      shouldIncrement,
     })
 
     return Response.json({

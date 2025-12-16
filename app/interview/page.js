@@ -27,6 +27,7 @@ import EnhancedSpeechRecognition from "@/components/EnhancedSpeechRecognition"
 import InterviewProgress from "@/components/InterviewProgress"
 import AIAvatar from "@/components/AIAvatar"
 import CodeIDETestModal from "@/components/CodeIDETestModal"
+import InterviewTimer from "@/components/InterviewTimer"
 
 export default function InterviewPage() {
 
@@ -62,6 +63,7 @@ export default function InterviewPage() {
   })
   const [allScores, setAllScores] = useState([])
   const [questionCount, setQuestionCount] = useState(0)
+  const [timeForQuestion, setTimeForQuestion] = useState(-1)
   const [showIde, setShowIde] = useState(false)
   const [ideData, setIdeData] = useState({ideStatus : false, question: "Implement a function to reverse a linked list.", codeType : "write"})
 
@@ -75,6 +77,7 @@ export default function InterviewPage() {
       await handleUserResponse(`Here is my code submission for the coding challenge:\n\n${codeSnippet}\n\nLanguage: ${language}`, 1.0,true)
       // setShowIde(false)
     } 
+     setIsMicOn(true)
     // alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
   }
 
@@ -282,10 +285,12 @@ export default function InterviewPage() {
       if (data.question) {
         const newQuestion = data.question
         setCurrentQuestion(newQuestion)
+        setTimeForQuestion(data.time || 60)
 
         if(data.ide)
         {
 
+           setIsMicOn(false)
           console.log(data.ide,data.question,data.codeType,data.codeSnippet)
           setShowIde(true)
           setIdeData({
@@ -402,6 +407,7 @@ export default function InterviewPage() {
   }
 
   const toggleMic = () => {
+    console.log("toggling mic. Current state:", isMicOn)
     setIsMicOn(!isMicOn)
     if (mediaStreamRef.current) {
       const audioTrack = mediaStreamRef.current.getAudioTracks()[0]
@@ -459,7 +465,19 @@ export default function InterviewPage() {
             </Button>
 
             <div className="flex items-center space-x-4">
+                <InterviewTimer 
+                    initialSeconds={timeForQuestion} 
+                    // initialSeconds={10} 
+                    isInterviewStarted = {isInterviewStarted}
+                    onTimesUp={async () => {
+                      await handleUserResponse("Times up !", 0.0)
+                      console.log('Time is up!');
+                    }}
+                  />
+
+                  
               <InterviewProgress current={questionCount} total={5} isActive={isInterviewStarted} />
+
 
               <Select value={selectedPersonality} onValueChange={handlePersonalityChange}>
                 <SelectTrigger className="w-48 bg-white/10 border-white/20 text-white backdrop-blur-sm">
@@ -561,7 +579,7 @@ export default function InterviewPage() {
                   </div>
                 </div>
 
-                <div className="mt-4">
+              { isMicOn && <div className="mt-4">
                   <EnhancedSpeechRecognition
                     isListening={isListening}
                     setIsListening={setIsListening}
@@ -571,7 +589,7 @@ export default function InterviewPage() {
                     isMicOn={isMicOn}
                     isInterviewStarted={isInterviewStarted}
                   />
-                </div>
+                </div>}
 
                 {interimTranscript && (
                   <motion.div
