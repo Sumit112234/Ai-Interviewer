@@ -6,113 +6,113 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, Mail, Lock, LogIn, ArrowLeft } from "lucide-react"
+import { Loader2, Mail, Lock, Eye, EyeOff , LogIn, ArrowLeft } from "lucide-react"
 
 // Cute Owl Component
-const OwlIllustration = ({ isPasswordFocused }) => {
-  return (
-    <motion.div
-      initial={{ scale: 0, rotate: -180 }}
-      animate={{ scale: 1, rotate: 0 }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="relative w-32 h-32 mx-auto mb-4"
-    >
-      {/* Owl Body */}
-      <motion.div
-        animate={{ rotate: isPasswordFocused ? [0, -5, 5, -5, 0] : 0 }}
-        transition={{ duration: 0.5 }}
-        className="absolute inset-0"
-      >
-        {/* Main body */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-20 bg-gradient-to-b from-purple-400 to-purple-500 rounded-[60%_60%_50%_50%]" />
+// const OwlIllustration = ({ isPasswordFocused }) => {
+//   return (
+//     <motion.div
+//       initial={{ scale: 0, rotate: -180 }}
+//       animate={{ scale: 1, rotate: 0 }}
+//       transition={{ type: "spring", stiffness: 260, damping: 20 }}
+//       className="relative w-32 h-32 mx-auto mb-4"
+//     >
+//       {/* Owl Body */}
+//       <motion.div
+//         animate={{ rotate: isPasswordFocused ? [0, -5, 5, -5, 0] : 0 }}
+//         transition={{ duration: 0.5 }}
+//         className="absolute inset-0"
+//       >
+//         {/* Main body */}
+//         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-20 bg-gradient-to-b from-purple-400 to-purple-500 rounded-[60%_60%_50%_50%]" />
         
-        {/* Head */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-24 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-[50%_50%_45%_45%]" />
+//         {/* Head */}
+//         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-24 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-[50%_50%_45%_45%]" />
         
-        {/* Ears */}
-        <div className="absolute top-0 left-3 w-6 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-t-full transform -rotate-12" />
-        <div className="absolute top-0 right-3 w-6 h-10 bg-gradient-to-bl from-indigo-500 to-purple-600 rounded-t-full transform rotate-12" />
+//         {/* Ears */}
+//         <div className="absolute top-0 left-3 w-6 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-t-full transform -rotate-12" />
+//         <div className="absolute top-0 right-3 w-6 h-10 bg-gradient-to-bl from-indigo-500 to-purple-600 rounded-t-full transform rotate-12" />
         
-        {/* Belly */}
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16 h-14 bg-gradient-to-b from-pink-200 to-pink-300 rounded-[50%_50%_40%_40%]" />
+//         {/* Belly */}
+//         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16 h-14 bg-gradient-to-b from-pink-200 to-pink-300 rounded-[50%_50%_40%_40%]" />
         
-        {/* Eyes Container */}
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 flex gap-3">
-          {/* Left Eye */}
-          <motion.div
-            animate={{
-              scaleY: isPasswordFocused ? 0 : 1,
-              y: isPasswordFocused ? 4 : 0
-            }}
-            transition={{ duration: 0.3 }}
-            className="relative w-8 h-10 bg-white rounded-full overflow-hidden"
-          >
-            <motion.div
-              animate={{ y: isPasswordFocused ? 0 : [0, 2, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="absolute top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gray-900 rounded-full"
-            >
-              <div className="absolute top-1 left-1 w-2 h-2 bg-white rounded-full" />
-            </motion.div>
-          </motion.div>
+//         {/* Eyes Container */}
+//         <div className="absolute top-8 left-1/2 -translate-x-1/2 flex gap-3">
+//           {/* Left Eye */}
+//           <motion.div
+//             animate={{
+//               scaleY: isPasswordFocused ? 0 : 1,
+//               y: isPasswordFocused ? 4 : 0
+//             }}
+//             transition={{ duration: 0.3 }}
+//             className="relative w-8 h-10 bg-white rounded-full overflow-hidden"
+//           >
+//             <motion.div
+//               animate={{ y: isPasswordFocused ? 0 : [0, 2, 0] }}
+//               transition={{ duration: 2, repeat: Infinity }}
+//               className="absolute top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gray-900 rounded-full"
+//             >
+//               <div className="absolute top-1 left-1 w-2 h-2 bg-white rounded-full" />
+//             </motion.div>
+//           </motion.div>
           
-          {/* Right Eye */}
-          <motion.div
-            animate={{
-              scaleY: isPasswordFocused ? 0 : 1,
-              y: isPasswordFocused ? 4 : 0
-            }}
-            transition={{ duration: 0.3 }}
-            className="relative w-8 h-10 bg-white rounded-full overflow-hidden"
-          >
-            <motion.div
-              animate={{ y: isPasswordFocused ? 0 : [0, 2, 0] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}
-              className="absolute top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gray-900 rounded-full"
-            >
-              <div className="absolute top-1 left-1 w-2 h-2 bg-white rounded-full" />
-            </motion.div>
-          </motion.div>
-        </div>
+//           {/* Right Eye */}
+//           <motion.div
+//             animate={{
+//               scaleY: isPasswordFocused ? 0 : 1,
+//               y: isPasswordFocused ? 4 : 0
+//             }}
+//             transition={{ duration: 0.3 }}
+//             className="relative w-8 h-10 bg-white rounded-full overflow-hidden"
+//           >
+//             <motion.div
+//               animate={{ y: isPasswordFocused ? 0 : [0, 2, 0] }}
+//               transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}
+//               className="absolute top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-gray-900 rounded-full"
+//             >
+//               <div className="absolute top-1 left-1 w-2 h-2 bg-white rounded-full" />
+//             </motion.div>
+//           </motion.div>
+//         </div>
 
-        {/* Wings covering eyes when password focused */}
-        <AnimatePresence>
-          {isPasswordFocused && (
-            <>
-              <motion.div
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute top-10 left-4 w-10 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-[50%_0%_50%_50%] transform -rotate-12"
-              />
-              <motion.div
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 20, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute top-10 right-4 w-10 h-12 bg-gradient-to-bl from-purple-400 to-purple-600 rounded-[0%_50%_50%_50%] transform rotate-12"
-              />
-            </>
-          )}
-        </AnimatePresence>
+//         {/* Wings covering eyes when password focused */}
+//         <AnimatePresence>
+//           {isPasswordFocused && (
+//             <>
+//               <motion.div
+//                 initial={{ x: -20, opacity: 0 }}
+//                 animate={{ x: 0, opacity: 1 }}
+//                 exit={{ x: -20, opacity: 0 }}
+//                 transition={{ duration: 0.3 }}
+//                 className="absolute top-10 left-4 w-10 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-[50%_0%_50%_50%] transform -rotate-12"
+//               />
+//               <motion.div
+//                 initial={{ x: 20, opacity: 0 }}
+//                 animate={{ x: 0, opacity: 1 }}
+//                 exit={{ x: 20, opacity: 0 }}
+//                 transition={{ duration: 0.3 }}
+//                 className="absolute top-10 right-4 w-10 h-12 bg-gradient-to-bl from-purple-400 to-purple-600 rounded-[0%_50%_50%_50%] transform rotate-12"
+//               />
+//             </>
+//           )}
+//         </AnimatePresence>
         
-        {/* Beak */}
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 w-3 h-4 bg-gradient-to-b from-orange-400 to-orange-500 rounded-b-full" />
+//         {/* Beak */}
+//         <div className="absolute top-16 left-1/2 -translate-x-1/2 w-3 h-4 bg-gradient-to-b from-orange-400 to-orange-500 rounded-b-full" />
         
-        {/* Feet */}
-        <div className="absolute -bottom-2 left-8 flex gap-1">
-          <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
-          <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
-        </div>
-        <div className="absolute -bottom-2 right-8 flex gap-1">
-          <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
-          <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
+//         {/* Feet */}
+//         <div className="absolute -bottom-2 left-8 flex gap-1">
+//           <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
+//           <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
+//         </div>
+//         <div className="absolute -bottom-2 right-8 flex gap-1">
+//           <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
+//           <div className="w-2 h-3 bg-orange-500 rounded-b-md" />
+//         </div>
+//       </motion.div>
+//     </motion.div>
+//   )
+// }
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -349,6 +349,409 @@ export default function LoginPage() {
     </div>
   )
 }
+
+
+
+const OwlIllustration = ({ isPasswordFocused }) => {
+  return (
+    <motion.div
+      initial={{ scale: 0, rotate: -180, y: -50 }}
+      animate={{ scale: 1, rotate: 0, y: 0 }}
+      transition={{ type: "spring", stiffness: 200, damping: 18 }}
+      className="relative w-40 h-40 mx-auto mb-4"
+    >
+      {/* Owl Body */}
+      <motion.div
+        animate={{ 
+          rotate: isPasswordFocused ? [0, -3, 3, -3, 0] : [0, -1, 1, -1, 0],
+          y: isPasswordFocused ? 0 : [0, -2, 0]
+        }}
+        transition={{ 
+          rotate: { duration: 0.6 },
+          y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+        }}
+        className="absolute inset-0"
+      >
+        {/* Shadow */}
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.2, 0.3] }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-20 h-3 bg-black/20 rounded-full blur-sm"
+        />
+        
+        {/* Main body with feather texture */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-24 bg-gradient-to-b from-amber-700 via-amber-800 to-amber-900 rounded-[60%_60%_50%_50%] shadow-lg">
+          {/* Feather details */}
+          <div className="absolute inset-0 opacity-40">
+            <div className="absolute top-2 left-3 w-4 h-6 bg-amber-900/50 rounded-full transform -rotate-12" />
+            <div className="absolute top-2 right-3 w-4 h-6 bg-amber-900/50 rounded-full transform rotate-12" />
+            <div className="absolute top-6 left-4 w-3 h-5 bg-amber-900/50 rounded-full transform -rotate-6" />
+            <div className="absolute top-6 right-4 w-3 h-5 bg-amber-900/50 rounded-full transform rotate-6" />
+          </div>
+        </div>
+        
+        {/* Head with texture */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-32 h-28 bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 rounded-[50%_50%_45%_45%] shadow-xl">
+          {/* Head feather pattern */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-3 left-6 w-5 h-7 bg-amber-900/60 rounded-full" />
+            <div className="absolute top-3 right-6 w-5 h-7 bg-amber-900/60 rounded-full" />
+            <div className="absolute top-8 left-8 w-4 h-6 bg-amber-900/60 rounded-full" />
+            <div className="absolute top-8 right-8 w-4 h-6 bg-amber-900/60 rounded-full" />
+          </div>
+        </div>
+        
+        {/* Ear tufts with animation */}
+        <motion.div
+          animate={{ rotate: isPasswordFocused ? -20 : [-12, -8, -12] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute top-0 left-4 w-7 h-14 bg-gradient-to-br from-amber-600 via-amber-700 to-amber-900 rounded-t-full shadow-md"
+        >
+          <div className="absolute top-1 left-1 w-5 h-10 bg-gradient-to-br from-amber-500/50 to-transparent rounded-t-full" />
+        </motion.div>
+        <motion.div
+          animate={{ rotate: isPasswordFocused ? 20 : [12, 8, 12] }}
+          transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+          className="absolute top-0 right-4 w-7 h-14 bg-gradient-to-bl from-amber-600 via-amber-700 to-amber-900 rounded-t-full shadow-md"
+        >
+          <div className="absolute top-1 right-1 w-5 h-10 bg-gradient-to-bl from-amber-500/50 to-transparent rounded-t-full" />
+        </motion.div>
+        
+        {/* Belly with detailed feathers */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-18 h-16 bg-gradient-to-b from-amber-200 via-amber-300 to-amber-400 rounded-[50%_50%_40%_40%] shadow-inner">
+          {/* Belly feather lines */}
+          <div className="absolute inset-2 flex flex-col gap-1 items-center opacity-50">
+            <div className="w-10 h-0.5 bg-amber-600/40 rounded-full" />
+            <div className="w-8 h-0.5 bg-amber-600/40 rounded-full" />
+            <div className="w-10 h-0.5 bg-amber-600/40 rounded-full" />
+            <div className="w-8 h-0.5 bg-amber-600/40 rounded-full" />
+          </div>
+        </div>
+        
+        {/* Eyes Container with facial disc */}
+        <div className="absolute top-9 left-1/2 -translate-x-1/2">
+          {/* Facial disc - characteristic owl feature */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-20 bg-gradient-radial from-amber-300/30 to-transparent rounded-full" />
+          
+          <div className="relative flex gap-4">
+            {/* Left Eye */}
+            <div className="relative">
+              {/* Eye socket shadow */}
+              <div className="absolute -inset-1 bg-amber-900/40 rounded-full blur-sm" />
+              
+              <motion.div
+                animate={{
+                  scaleY: isPasswordFocused ? 0.1 : 1,
+                  y: isPasswordFocused ? 5 : 0
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="relative w-10 h-12 bg-gradient-to-b from-yellow-100 to-white rounded-full overflow-hidden shadow-inner border-2 border-amber-800/30"
+              >
+                {/* Iris */}
+                <motion.div
+                  animate={{ 
+                    y: isPasswordFocused ? 0 : [0, 1, 0],
+                    scale: isPasswordFocused ? 0 : 1
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-gradient-to-b from-orange-600 to-amber-700 rounded-full shadow-md"
+                >
+                  {/* Pupil */}
+                  <motion.div
+                    animate={{ scale: [1, 0.9, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full"
+                  >
+                    {/* Light reflection */}
+                    <div className="absolute top-1 left-1.5 w-2 h-2 bg-white rounded-full opacity-90" />
+                    <div className="absolute bottom-1 right-1 w-1 h-1 bg-white/50 rounded-full" />
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            </div>
+            
+            {/* Right Eye */}
+            <div className="relative">
+              {/* Eye socket shadow */}
+              <div className="absolute -inset-1 bg-amber-900/40 rounded-full blur-sm" />
+              
+              <motion.div
+                animate={{
+                  scaleY: isPasswordFocused ? 0.1 : 1,
+                  y: isPasswordFocused ? 5 : 0
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut", delay: 0.05 }}
+                className="relative w-10 h-12 bg-gradient-to-b from-yellow-100 to-white rounded-full overflow-hidden shadow-inner border-2 border-amber-800/30"
+              >
+                {/* Iris */}
+                <motion.div
+                  animate={{ 
+                    y: isPasswordFocused ? 0 : [0, 1, 0],
+                    scale: isPasswordFocused ? 0 : 1
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 0.2 }}
+                  className="absolute top-3 left-1/2 -translate-x-1/2 w-7 h-7 bg-gradient-to-b from-orange-600 to-amber-700 rounded-full shadow-md"
+                >
+                  {/* Pupil */}
+                  <motion.div
+                    animate={{ scale: [1, 0.9, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full"
+                  >
+                    {/* Light reflection */}
+                    <div className="absolute top-1 left-1.5 w-2 h-2 bg-white rounded-full opacity-90" />
+                    <div className="absolute bottom-1 right-1 w-1 h-1 bg-white/50 rounded-full" />
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Wings covering eyes when password focused - more realistic */}
+        <AnimatePresence>
+          {isPasswordFocused && (
+            <>
+              {/* Left wing */}
+              <motion.div
+                initial={{ x: -30, opacity: 0, rotate: -20 }}
+                animate={{ x: 0, opacity: 1, rotate: -15 }}
+                exit={{ x: -30, opacity: 0, rotate: -20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="absolute top-11 left-2 w-14 h-16 bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 rounded-[60%_20%_70%_40%] shadow-xl"
+              >
+                {/* Wing feather details */}
+                <div className="absolute inset-1 opacity-40">
+                  <div className="absolute top-2 left-2 w-3 h-8 bg-amber-900/60 rounded-full" />
+                  <div className="absolute top-3 left-5 w-2 h-7 bg-amber-900/60 rounded-full" />
+                  <div className="absolute top-4 left-8 w-2 h-6 bg-amber-900/60 rounded-full" />
+                </div>
+              </motion.div>
+              
+              {/* Right wing */}
+              <motion.div
+                initial={{ x: 30, opacity: 0, rotate: 20 }}
+                animate={{ x: 0, opacity: 1, rotate: 15 }}
+                exit={{ x: 30, opacity: 0, rotate: 20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="absolute top-11 right-2 w-14 h-16 bg-gradient-to-bl from-amber-600 via-amber-700 to-amber-800 rounded-[20%_60%_40%_70%] shadow-xl"
+              >
+                {/* Wing feather details */}
+                <div className="absolute inset-1 opacity-40">
+                  <div className="absolute top-2 right-2 w-3 h-8 bg-amber-900/60 rounded-full" />
+                  <div className="absolute top-3 right-5 w-2 h-7 bg-amber-900/60 rounded-full" />
+                  <div className="absolute top-4 right-8 w-2 h-6 bg-amber-900/60 rounded-full" />
+                </div>
+              </motion.div>
+              
+              {/* Closed eye slits */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute top-14 left-1/2 -translate-x-1/2 flex gap-4"
+              >
+                <div className="w-10 h-1 bg-amber-900 rounded-full" />
+                <div className="w-10 h-1 bg-amber-900 rounded-full" />
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+        
+        {/* Beak - more detailed */}
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-10">
+          <div className="relative w-4 h-5 bg-gradient-to-b from-orange-500 to-orange-600 rounded-b-full shadow-md">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-2 bg-orange-400" />
+            <div className="absolute top-1 left-0 w-1 h-2 bg-orange-700/40 rounded-l-full" />
+          </div>
+        </div>
+        
+        {/* Talons - more realistic */}
+        <motion.div
+          animate={{ y: [0, 1, 0] }}
+          transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+          className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex gap-6"
+        >
+          {/* Left foot */}
+          <div className="relative">
+            <div className="flex gap-0.5">
+              <div className="w-1.5 h-4 bg-gradient-to-b from-gray-600 to-gray-700 rounded-b-md shadow-sm" />
+              <div className="w-1.5 h-4 bg-gradient-to-b from-gray-600 to-gray-700 rounded-b-md shadow-sm" />
+              <div className="w-1.5 h-3.5 bg-gradient-to-b from-gray-600 to-gray-700 rounded-b-md shadow-sm" />
+            </div>
+            {/* Claws */}
+            <div className="absolute -bottom-0.5 left-0 w-1.5 h-1 bg-gray-800 rounded-b-full" />
+            <div className="absolute -bottom-0.5 left-2 w-1.5 h-1 bg-gray-800 rounded-b-full" />
+            <div className="absolute -bottom-0.5 right-0 w-1.5 h-1 bg-gray-800 rounded-b-full" />
+          </div>
+          
+          {/* Right foot */}
+          <div className="relative">
+            <div className="flex gap-0.5">
+              <div className="w-1.5 h-3.5 bg-gradient-to-b from-gray-600 to-gray-700 rounded-b-md shadow-sm" />
+              <div className="w-1.5 h-4 bg-gradient-to-b from-gray-600 to-gray-700 rounded-b-md shadow-sm" />
+              <div className="w-1.5 h-4 bg-gradient-to-b from-gray-600 to-gray-700 rounded-b-md shadow-sm" />
+            </div>
+            {/* Claws */}
+            <div className="absolute -bottom-0.5 left-0 w-1.5 h-1 bg-gray-800 rounded-b-full" />
+            <div className="absolute -bottom-0.5 left-2 w-1.5 h-1 bg-gray-800 rounded-b-full" />
+            <div className="absolute -bottom-0.5 right-0 w-1.5 h-1 bg-gray-800 rounded-b-full" />
+          </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// export default function OwlLoginForm() {
+//   const [email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     console.log('Login attempt:', { email, password });
+//     // Add your login logic here
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+//       <motion.div
+//         initial={{ opacity: 0, y: 20 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         transition={{ duration: 0.5 }}
+//         className="w-full max-w-md"
+//       >
+//         <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
+//           {/* Owl Illustration */}
+//           <OwlIllustration isPasswordFocused={isPasswordFocused} />
+
+//           {/* Title */}
+//           <motion.div
+//             initial={{ opacity: 0 }}
+//             animate={{ opacity: 1 }}
+//             transition={{ delay: 0.3 }}
+//             className="text-center mb-8"
+//           >
+//             <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+//             <p className="text-gray-300">Sign in to continue</p>
+//           </motion.div>
+
+//           {/* Login Form */}
+//           <div className="space-y-6">
+//             {/* Email Field */}
+//             <div className="relative">
+//               <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+//                 Email Address
+//               </label>
+//               <div className="relative">
+//                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+//                 <input
+//                   id="email"
+//                   type="email"
+//                   value={email}
+//                   onChange={(e) => setEmail(e.target.value)}
+//                   className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+//                   placeholder="your@email.com"
+//                   required
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Password Field */}
+//             <div className="relative">
+//               <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2">
+//                 Password
+//               </label>
+//               <div className="relative">
+//                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+//                 <input
+//                   id="password"
+//                   type={showPassword ? "text" : "password"}
+//                   value={password}
+//                   onChange={(e) => setPassword(e.target.value)}
+//                   onFocus={() => setIsPasswordFocused(true)}
+//                   onBlur={() => setIsPasswordFocused(false)}
+//                   className="w-full pl-12 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+//                   placeholder="••••••••"
+//                   required
+//                 />
+//                 <button
+//                   type="button"
+//                   onClick={() => setShowPassword(!showPassword)}
+//                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+//                 >
+//                   {showPassword ? (
+//                     <EyeOff className="w-5 h-5" />
+//                   ) : (
+//                     <Eye className="w-5 h-5" />
+//                   )}
+//                 </button>
+//               </div>
+//             </div>
+
+//             {/* Remember Me & Forgot Password */}
+//             <div className="flex items-center justify-between text-sm">
+//               <label className="flex items-center text-gray-300 cursor-pointer">
+//                 <input
+//                   type="checkbox"
+//                   className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 focus:ring-offset-0 mr-2"
+//                 />
+//                 Remember me
+//               </label>
+//               <button
+//                 type="button"
+//                 onClick={() => alert('Password reset functionality')}
+//                 className="text-purple-400 hover:text-purple-300 transition-colors"
+//               >
+//                 Forgot password?
+//               </button>
+//             </div>
+
+//             {/* Submit Button */}
+//             <motion.button
+//               type="button"
+//               onClick={handleSubmit}
+//               whileHover={{ scale: 1.02 }}
+//               whileTap={{ scale: 0.98 }}
+//               className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+//             >
+//               Sign In
+//             </motion.button>
+//           </div>
+
+//           {/* Sign Up Link */}
+//           <p className="text-center text-gray-300 mt-6">
+//             Don't have an account?{' '}
+//             <button
+//               type="button"
+//               onClick={() => alert('Sign up functionality')}
+//               className="text-purple-400 hover:text-purple-300 font-semibold transition-colors"
+//             >
+//               Sign up
+//             </button>
+//           </p>
+//         </div>
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // "use client"
 

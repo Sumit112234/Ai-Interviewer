@@ -28,6 +28,7 @@ import InterviewProgress from "@/components/InterviewProgress"
 import AIAvatar from "@/components/AIAvatar"
 import CodeIDETestModal from "@/components/CodeIDETestModal"
 import InterviewTimer from "@/components/InterviewTimer"
+import { getUser } from "../context/auth"
 
 export default function InterviewPage() {
 
@@ -82,6 +83,7 @@ export default function InterviewPage() {
   }
 
   
+
   useEffect(()=>{
     if(ideData.ideStatus === false)
     {
@@ -163,6 +165,23 @@ export default function InterviewPage() {
       }
     }
   }, [])
+
+  const [user, setUser] = useState(null)
+  
+    useEffect(() => {
+      async function fetchUser() {
+        const userData = await getUser()
+            if(!userData)
+                {
+                  router.push("/login")
+                }
+        setUser(userData)
+      }
+      fetchUser()
+    },[])
+
+
+  
 
   const initializeMedia = async () => {
     try {

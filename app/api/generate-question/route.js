@@ -565,6 +565,9 @@ export async function GET(){
 
 import { generateText } from "ai"
 import { cohere } from "@ai-sdk/cohere"
+import { NextResponse } from "next/server"
+import { cookies } from "next/headers"
+import { verifyToken } from "@/lib/auth"
 
 function summarizeResume(resumeData) {
   if (!resumeData) return "No resume provided."
@@ -790,7 +793,17 @@ function shouldAskCodingQuestion(questionCount, codingQuestionsAsked, totalQuest
   return Math.random() < 0.2 // 20% chance
 }
 
+const AUTH_COOKIE = "auth_token"
+
+
 export async function POST(request) {
+
+    const cookieStore = await cookies();
+     const token = cookieStore.get(AUTH_COOKIE)?.value;
+  
+      if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  
+  
   try {
     const body = await request.json()
     const {
