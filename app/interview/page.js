@@ -181,6 +181,40 @@ export default function InterviewPage() {
     },[])
 
 
+const sendFrameToPython = async () => {
+  if (!videoRef.current) return
+
+  const canvas = document.createElement("canvas")
+  canvas.width = 320
+  canvas.height = 240
+
+  const ctx = canvas.getContext("2d")
+  ctx.drawImage(videoRef.current, 0, 0, 320, 240)
+
+  const base64 = canvas
+    .toDataURL("image/jpeg", 0.5)
+    .split(",")[1]
+
+  const res = await fetch("http://localhost:8000/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ image: base64 })
+  })
+
+  const data = await res.json()
+
+  if (data.cheating) console.error("🚨 CHEATING DETECTED", data)
+  else console.log("AI Monitor:", data)
+}
+
+useEffect(() => {
+  // setTimeout(() => {
+  //   sendFrameToPython()
+  // },2000)
+  const interval = setInterval(sendFrameToPython, 3000)
+  return () => clearInterval(interval)
+}, [])
+
   
 
   const initializeMedia = async () => {
