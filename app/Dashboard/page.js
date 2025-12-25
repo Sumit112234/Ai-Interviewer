@@ -606,7 +606,7 @@ useEffect(() => {
             className="mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-lg mx-auto px-4"
           >
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => router.push('/login')}
               className="group relative w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-500 dark:to-blue-500 text-white font-semibold text-base sm:text-lg shadow-lg shadow-purple-500/25 dark:shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/40 dark:hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105"
             >
               <span className="relative z-10">Start Practicing</span>
@@ -1877,7 +1877,7 @@ useEffect(() => {
 //         >
 //           <motion.div variants={itemVariants}>
 //             <motion.h2
-//               className="text-7xl font-bold bg-gradient-to-r from-white via-yellow-200 to-pink-200 bg-clip-text text-transparent mb-8"
+//               className="text-7xl font-bold bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent mb-8"
 //               initial={{ opacity: 0, scale: 0.5 }}
 //               animate={{ opacity: 1, scale: 1 }}
 //               transition={{ duration: 1, ease: "easeOut" }}
@@ -1981,7 +1981,7 @@ useEffect(() => {
 //             <h3 className="text-5xl font-bold bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent mb-6">
 //               Why Choose Our Platform?
 //             </h3>
-//             <p className="text-xl text-white/80 max-w-3xl mx-auto">
+//             <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
 //               Experience the future of interview preparation with cutting-edge AI technology
 //             </p>
 //           </motion.div>
@@ -2030,7 +2030,7 @@ useEffect(() => {
 //                 gradient: "from-teal-500 to-green-500",
 //                 delay: 0.6
 //               }
-//             ].map((feature, index) => (
+//             ].map((column, index) => (
 //               <motion.div
 //                 key={index}
 //                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -2038,7 +2038,7 @@ useEffect(() => {
 //                 viewport={{ once: true, margin: "-50px" }}
 //                 transition={{ 
 //                   duration: 0.8, 
-//                   delay: feature.delay,
+//                   delay: column.delay,
 //                   type: "spring",
 //                   stiffness: 100 
 //                 }}
@@ -2049,19 +2049,21 @@ useEffect(() => {
 //                 }}
 //               >
 //                 <Card className="bg-white/20 dark:bg-black/20 backdrop-blur-xl border border-white/30 h-full hover:bg-white/30 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
-//                   <CardContent className="p-8 text-center">
+//                   <CardContent className="p-8">
 //                     <motion.div
-//                       className={`inline-flex p-6 rounded-full bg-gradient-to-r ${feature.gradient} mb-6 shadow-lg`}
+//                       className={`inline-flex p-6 rounded-full bg-gradient-to-r ${column.gradient} mb-6 shadow-lg`}
 //                       whileHover={{ 
 //                         rotate: 360,
 //                         scale: 1.1
 //                       }}
 //                       transition={{ duration: 0.6 }}
 //                     >
-//                       <feature.icon className="h-8 w-8 text-white" />
+//                       <column.icon className="h-8 w-8 text-white" />
 //                     </motion.div>
-//                     <h4 className="text-2xl font-bold text-white mb-4">{feature.title}</h4>
-//                     <p className="text-white/80 leading-relaxed">{feature.description}</p>
+//                     <h4 className="text-2xl font-bold text-white mb-4">{column.title}</h4>
+//                     <p className="text-white/80 leading-relaxed">
+//                       {column.description}
+//                     </p>
 //                   </CardContent>
 //                 </Card>
 //               </motion.div>
@@ -2078,7 +2080,7 @@ useEffect(() => {
 //           transition={{ duration: 0.8 }}
 //         >
 //           <motion.div
-//             className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
+//             className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"
 //             variants={containerVariants}
 //             initial="hidden"
 //             whileInView="visible"
@@ -2113,7 +2115,9 @@ useEffect(() => {
 //                     >
 //                       {stat.number}
 //                     </motion.div>
-//                     <p className="text-white/80 font-medium">{stat.label}</p>
+//                     <p className="text-white/80 font-medium">
+//                       {stat.label}
+//                     </p>
 //                   </CardContent>
 //                 </Card>
 //               </motion.div>
@@ -2171,7 +2175,7 @@ useEffect(() => {
 //                         whileHover={{ x: 10, transition: { duration: 0.2 } }}
 //                       >
 //                         <motion.div
-//                           className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center font-bold text-white"
+//                           className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center font-bold text-white"
 //                           whileHover={{ rotate: 360, scale: 1.1 }}
 //                           transition={{ duration: 0.5 }}
 //                         >
@@ -2263,16 +2267,16 @@ useEffect(() => {
 //                   >
 //                     <Brain className="h-20 w-20 text-yellow-300 mx-auto mb-6" />
 //                   </motion.div>
-                  
+//                   
 //                   <h3 className="text-4xl font-bold bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">
 //                     Ready to Transform Your Interview Skills?
 //                   </h3>
-                  
+//                   
 //                   <p className="text-xl text-white/80 leading-relaxed max-w-2xl mx-auto">
 //                     Join the revolution in interview preparation. Start practicing with AI-powered questions 
 //                     and get the confidence you need to succeed.
 //                   </p>
-                  
+//                   
 //                   <motion.div
 //                     whileHover={{ scale: 1.05 }}
 //                     whileTap={{ scale: 0.95 }}
@@ -2311,8 +2315,7 @@ useEffect(() => {
 //       <motion.footer 
 //         className="relative z-10 border-t border-white/20 bg-white/10 dark:bg-black/20 backdrop-blur-xl mt-20"
 //         initial={{ y: 100, opacity: 0 }}
-//         whileInView={{ y: 0, opacity: 1 }}
-//         viewport={{ once: true }}
+//         animate={{ y: 0, opacity: 1 }}
 //         transition={{ duration: 0.8, ease: "easeOut" }}
 //       >
 //         <div className="container mx-auto px-4 py-12">
@@ -2357,7 +2360,7 @@ useEffect(() => {
 //             <motion.div variants={itemVariants}>
 //               <h6 className="text-lg font-semibold text-white mb-4">Company</h6>
 //               <ul className="space-y-2 text-white/70">
-//                 {["About Us", "Careers", "Contact", "Privacy Policy"].map((item, index) => (
+//                 {["About", "Careers", "Press", "Partners"].map((item, index) => (
 //                   <motion.li 
 //                     key={index}
 //                     whileHover={{ x: 5, color: "#ffffff" }}
@@ -2373,7 +2376,7 @@ useEffect(() => {
 //             <motion.div variants={itemVariants}>
 //               <h6 className="text-lg font-semibold text-white mb-4">Support</h6>
 //               <ul className="space-y-2 text-white/70">
-//                 {["Help Center", "Documentation", "Community", "Feedback"].map((item, index) => (
+//                 {["Help Center", "Documentation", "Contact", "Status"].map((item, index) => (
 //                   <motion.li 
 //                     key={index}
 //                     whileHover={{ x: 5, color: "#ffffff" }}
@@ -2447,7 +2450,7 @@ useEffect(() => {
 //   const isFeaturesInView = useInView(featuresRef, { threshold: 0.3 })
 //   const isAboutInView = useInView(aboutRef, { threshold: 0.3 })
 
-//   // Parallax effects
+  // Parallax effects
 //   const backgroundY = useTransform(scrollY, [0, 1000], [0, -200])
 //   const textY = useTransform(scrollY, [0, 1000], [0, -100])
 
@@ -2593,7 +2596,7 @@ useEffect(() => {
 //             transition={{
 //               duration: Math.random() * 10 + 10,
 //               repeat: Infinity,
-//               ease: "easeInOut",
+//               delay: Math.random() * 2,
 //             }}
 //           />
 //         ))}
@@ -2737,23 +2740,14 @@ useEffect(() => {
 //             whileTap={{ scale: 0.95 }}
 //           >
 //             <motion.div
-//               className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400"
-//               initial={{ x: "-100%" }}
-//               whileHover={{ x: "0%" }}
-//               transition={{ duration: 0.6 }}
+//               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+//               animate={{ x: [-100, 300] }}
+//               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
 //             />
-//             <span className="relative z-10 flex items-center">
-//               Start Your Journey
-//               <motion.svg
-//                 className="ml-3 w-6 h-6"
-//                 fill="none"
-//                 stroke="currentColor"
-//                 viewBox="0 0 24 24"
-//                 animate={{ x: [0, 5, 0] }}
-//                 transition={{ duration: 2, repeat: Infinity }}
-//               >
-//                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-//               </motion.svg>
+//             <span className="relative z-10 flex items-center gap-4">
+//               <Play className="h-8 w-8" />
+//               Get Started Now
+//               <ArrowRight className="h-8 w-8" />
 //             </span>
 //           </motion.button>
 //         </motion.div>
@@ -2791,7 +2785,7 @@ useEffect(() => {
 //                 }}
 //               >
 //                 <motion.div
-//                   className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+//                   className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity duration-300`}
 //                 />
                 
 //                 <motion.div
@@ -2813,16 +2807,16 @@ useEffect(() => {
 //                   {feature.title}
 //                 </h3>
                 
-//                 <p className="text-white/70 mb-6 leading-relaxed">
+//                 <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
 //                   {feature.description}
 //                 </p>
 
-//                 <motion.div
-//                   className={`inline-block px-4 py-2 bg-gradient-to-r ${feature.color} text-white text-sm font-semibold rounded-full`}
-//                   whileHover={{ scale: 1.05 }}
-//                 >
-//                   {feature.stats}
-//                 </motion.div>
+//                 {/* Hover Arrow */}
+//                 <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+//                   <span className={`inline-flex items-center text-sm font-semibold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
+//                     Learn more →
+//                   </span>
+//                 </div>
 //               </motion.div>
 //             ))}
 //           </div>
@@ -2965,7 +2959,7 @@ useEffect(() => {
 //                   {column.links.map((link, linkIndex) => (
 //                     <motion.li
 //                       key={linkIndex}
-//                       whileHover={{ x: 5 }}
+//                       whileHover={{ x: 5, color: "#ffffff" }}
 //                       transition={{ duration: 0.2 }}
 //                     >
 //                       <a href="#" className="text-white/60 hover:text-white transition-colors">
