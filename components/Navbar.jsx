@@ -1,8 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -30,9 +33,9 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Features", path: "#features" },
-    { name: "How it Works", path: "#how-it-works" },
-    { name: "Pricing", path: "#pricing" },
+    { name: "Features", path: "features" },
+    { name: "How it Works", path: "how-it-works" },
+    { name: "Pricing", path: "pricing" },
   ];
 
   const handleNavClick = (path) => {
