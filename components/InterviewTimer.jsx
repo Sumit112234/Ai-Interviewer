@@ -6,6 +6,8 @@ const InterviewTimer = ({ initialSeconds = -1, onTimesUp, isInterviewStarted }) 
   const [isWarning, setIsWarning] = useState(false);
   const [isCritical, setIsCritical] = useState(false);
 
+  console.log('InterviewTimer rendered with initialSeconds:', initialSeconds);
+
   useEffect(() => {
     setSeconds(initialSeconds);
   }, [initialSeconds]);

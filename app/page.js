@@ -1,9 +1,12 @@
 import DynamicFaceAvatar from "@/components/RealisticAiAvatar";
 import Dashboard from "./Dashboard/page";
 import Temporary from "./temporary/page";
+import Navbar from "@/components/Navbar";
+
 export default function Home() {
   return (
     <div>
+      {/* <Navbar/> */}
       <Dashboard/>
       {/* <DynamicFaceAvatar
         personality="professional" 

@@ -1,0 +1,119 @@
+open route to visit the test page
+
+/interview/pagetest
+
+
+go to the page.js and set theset the IdeStatus true , if the interviewer have question related to coding
+
+
+
+
+make sure the funcitonality of the ide open and submit apply 
+
+/* 
+
+ref ::->
+
+
+
+codeSnippet
+: 
+null
+codeType
+: 
+"write"
+crossQuestion
+: 
+"What specific logic did you use to determine if a number is prime?"
+emotion
+: 
+"neutral"
+endInterview
+: 
+false
+expectedLanguage
+: 
+"javascript"
+followUpTopics
+: 
+(2) ['JavaScript', 'Problem-solving']
+ide
+: 
+true
+memoryUpdates
+: 
+['Candidate is interested in coding questions']
+notes
+: 
+"Candidate seems hesitant with previous questions but shows interest in coding. Scores are tentative, pending further responses."
+question
+: 
+"Can you explain your approach to the prime number function you mentioned?"
+questionCountShouldIncrement
+: 
+false
+reasoning
+: 
+"The candidate requested to write code and mentioned a prime number function. This follow-up question aims to understand their thought process and technical skills."
+scores
+: 
+{communication: 2, technical: 2, problemSolving: 2, cultureFit: 2}
+selectionFlags
+: 
+[]
+totals
+: 
+{communication: 2, technical: 2, problemSolving: 2, cultureFit: 2}
+[[Prototype]]
+: 
+Object
+
+*/
+
+
+
+
+
+
+here set is iside status true after if:
+
+
+
+const data = await response.json()
+      console.log(data)
+      if (data.question) {
+        const newQuestion = data.question
+        setCurrentQuestion(newQuestion)
+
+        const nextConversation = [...conversationToSend, { type: "ai", content: newQuestion, timestamp: Date.now() }]
+
+        conversationRef.current = nextConversation
+        setConversation(nextConversation)
+        if(data.questionCountShouldIncrement) {
+          setQuestionCount((prev) => {
+            const newCount = prev + 1
+            localStorage.setItem("questionCount", String(newCount))
+            return newCount
+          })
+       }
+      if (data.scores) {
+        setAllScores((prev) => [...prev, data.scores])
+      }
+
+        setAvatarState((prev) => ({ ...prev, emotion: data.emotion || "neutral" }))
+        setTimeout(() => {
+          speakText(newQuestion)
+        }, 500)
+      }
+    } catch (error) {
+      console.error("Error generating question:", error)
+    } finally {
+      setIsLoading(false)
+      // setAvatarState((prev) => ({ ...prev, emotion: "neutral" }))
+    }
+  }
+
+
+
+
+in the timer when timer ran out automatically user sent ai prompt that (i dont know) and then skip to next question.

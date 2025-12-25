@@ -347,6 +347,7 @@ useEffect(() => {
           console.log(data.ide,data.question,data.codeType,data.codeSnippet)
           setShowIde(true)
           setIdeData({
+            time : data.time || 120,
             ideStatus : data.ide,
             question : data.codeSnippet || data.question,
             codeType : data.codeType
@@ -518,6 +519,7 @@ useEffect(() => {
             </Button>
 
             <div className="flex items-center space-x-4">
+              
                 <InterviewTimer 
                     initialSeconds={timeForQuestion} 
                     // initialSeconds={10} 
@@ -726,6 +728,7 @@ useEffect(() => {
                     )}
                   </div>
                 </div>
+                
 
                 <div className="aspect-video bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg overflow-hidden">
                   <RealisticAIAvatar
