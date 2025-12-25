@@ -934,7 +934,7 @@ useEffect(() => {
                       </p>
                       
                       {/* CTA Button */}
-                      <button className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full bg-gradient-to-r from-orange-500 to-blue-500 text-white font-bold text-sm sm:text-base md:text-lg shadow-2xl shadow-orange-500/30 hover:shadow-3xl hover:scale-105 transition-all duration-300">
+                      <button onClick={()=>navigate('/Form')} className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full bg-gradient-to-r from-orange-500 to-blue-500 text-white font-bold text-sm sm:text-base md:text-lg shadow-2xl shadow-orange-500/30 hover:shadow-3xl hover:scale-105 transition-all duration-300">
                         Start Practicing
                       </button>
                     </div>
