@@ -6,7 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+<<<<<<< HEAD
 import { Loader2, Mail, Lock, Eye, EyeOff , LogIn, ArrowLeft } from "lucide-react"
+=======
+import { Loader2, Mail, Lock, LogIn, ArrowLeft } from "lucide-react"
+import { useRouter } from "next/navigation"
+>>>>>>> 4ca8fa6d3652fa5c05e8fa1cab93820b47c3dc25
 
 // Cute Owl Component
 // const OwlIllustration = ({ isPasswordFocused }) => {
@@ -115,6 +120,7 @@ import { Loader2, Mail, Lock, Eye, EyeOff , LogIn, ArrowLeft } from "lucide-reac
 // }
 
 export default function LoginPage() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -141,9 +147,11 @@ export default function LoginPage() {
     }
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     setError("")
 
+    // Validation
     if (!formData.email || !formData.password) {
       setError("Please fill in all fields")
       return
@@ -169,7 +177,8 @@ export default function LoginPage() {
         throw new Error(data.error || "Invalid credentials")
       }
 
-      window.location.href = "/"
+      // Redirect to form page
+      router.push("/Form")
     } catch (err) {
       setError(err.message)
     } finally {
