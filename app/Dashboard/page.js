@@ -755,7 +755,7 @@ useEffect(() => {
 
                 {/* Action Button */}
                 <div className="ai-button opacity-0 translate-y-10">
-                  <button className="w-full py-4 px-8 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-lg shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2">
+                  <button onClick={()=>navigate('/Form')} className="w-full cursor-pointer py-4 px-8 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-lg shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
@@ -771,11 +771,11 @@ useEffect(() => {
           </div>
 
           {/* ========== PIPELINE MULTI-STEP SECTION (DORA AI STYLE) ========== */}
-          <div className="pipeline-container absolute inset-0 flex items-center justify-center opacity-0 scale-95">
-            <div className="relative w-full max-w-7xl mx-4 sm:mx-6 lg:mx-auto h-auto min-h-[600px] md:h-[700px] flex flex-col lg:flex-row gap-8 md:gap-12 lg:gap-20 py-8 md:py-0">
+          <div  className="pipeline-container  absolute inset-0 flex items-center sm:my-16 sm:px-4  justify-center opacity-0 scale-95">
+            <div className="relative w-full max-w-7xl mx-4 sm:mx-6  lg:mx-auto h-auto min-h-[600px] md:h-[700px] flex flex-col lg:flex-row gap-8 md:gap-12 lg:gap-20 py-8 md:py-0">
               
               {/* LEFT SIDE - AI Pipeline Progress */}
-              <div className="relative flex-shrink-0 w-full lg:w-[400px] xl:w-[480px]">
+              <div id="how-it-works" className="relative flex-shrink-0 w-full lg:w-[400px] xl:w-[480px]">
                 
                 {/* Header */}
                 <div className="pipeline-header opacity-0 translate-y-4 mb-8 md:mb-12">
@@ -820,20 +820,20 @@ useEffect(() => {
                     
                     {/* Step 1 */}
                     <div className="step-1 pl-8 sm:pl-10 md:pl-12 opacity-30 transition-all duration-700">
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Analyzing prompt...</h3>
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Analyzing Resume...</h3>
                       <p className="text-gray-500 text-xs sm:text-sm">Understanding your interview requirements</p>
                     </div>
                     
                     {/* Step 2 */}
                     <div className="step-2 pl-8 sm:pl-10 md:pl-12 opacity-30 transition-all duration-700">
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Crafting designs...</h3>
-                      <p className="text-gray-500 text-xs sm:text-sm">Generating personalized questions</p>
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Interview Started...</h3>
+                      <p className="text-gray-500 text-xs sm:text-sm">Interview has started</p>
                     </div>
                     
                     {/* Step 3 */}
                     <div className="step-3 pl-8 sm:pl-10 md:pl-12 opacity-30 transition-all duration-700">
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Tweak, iterate, publish!</h3>
-                      <p className="text-gray-500 text-xs sm:text-sm">Ready for your practice session</p>
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Report is Ready!</h3>
+                      <p className="text-gray-500 text-xs sm:text-sm"> Report Ready for identifing your mistakes</p>
                     </div>
                     
                   </div>
@@ -870,7 +870,7 @@ useEffect(() => {
                       
                       {/* Progress Text */}
                       <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 sm:mb-4">
-                        Generating your interview...
+                        Analysing Your Resume...
                       </h3>
                       <p className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-400 to-blue-400 bg-clip-text text-transparent">
                         42%
@@ -930,7 +930,7 @@ useEffect(() => {
                         AI Interviewer
                       </h2>
                       <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-6 sm:mb-8">
-                        Your interview prep is ready!
+                        Your interview report is ready!
                       </p>
                       
                       {/* CTA Button */}
