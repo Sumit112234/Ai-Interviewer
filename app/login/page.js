@@ -6,12 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-<<<<<<< HEAD
-import { Loader2, Mail, Lock, Eye, EyeOff , LogIn, ArrowLeft } from "lucide-react"
-=======
 import { Loader2, Mail, Lock, LogIn, ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
->>>>>>> 4ca8fa6d3652fa5c05e8fa1cab93820b47c3dc25
 
 // Cute Owl Component
 // const OwlIllustration = ({ isPasswordFocused }) => {
