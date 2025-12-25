@@ -1,96 +1,203 @@
-import React from 'react';
+// app/how-it-works/page.jsx
+'use client';
 
-const HowItWorks = () => {
+import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function HowItWorksPage() {
+  const timelineRef = useRef();
+  const stepsRef = useRef([]);
+
+  useEffect(() => {
+    // Animate timeline line
+    gsap.fromTo(
+      timelineRef.current,
+      { scaleY: 0 },
+      {
+        scaleY: 1,
+        duration: 2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.steps-container',
+          start: 'top 30%',
+          end: 'bottom 70%',
+          scrub: 1,
+        },
+      }
+    );
+
+    // Animate steps
+    stepsRef.current.forEach((step, index) => {
+      gsap.fromTo(
+        step,
+        {
+          opacity: 0,
+          x: index % 2 === 0 ? -50 : 50,
+          scale: 0.8,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          duration: 0.8,
+          delay: index * 0.3,
+          scrollTrigger: {
+            trigger: step,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+
   const steps = [
     {
-      number: "01",
-      title: "Choose Your Role",
-      description: "Select the position and industry you're interviewing for. Our AI customizes questions based on your specific career path.",
-      highlight: "Personalized Setup"
+      number: '01',
+      title: 'Sign Up & Set Goals',
+      description: 'Create your free account and tell us about your target role, industry, and experience level.',
+      icon: '🎯',
     },
     {
-      number: "02",
-      title: "Start Your Practice Session",
-      description: "Jump into a realistic interview environment where our AI interviewer asks relevant questions and responds naturally to your answers.",
-      highlight: "Realistic Simulation"
+      number: '02',
+      title: 'Choose Practice Mode',
+      description: 'Select from mock interviews, question banks, or specific skill-building exercises.',
+      icon: '🤖',
     },
     {
-      number: "03",
-      title: "Receive Instant Feedback",
-      description: "Get detailed analysis on your responses, including communication clarity, content quality, and body language insights.",
-      highlight: "Real-Time Analysis"
+      number: '03',
+      title: 'AI-Powered Interview',
+      description: 'Our AI conducts a realistic interview, asking tailored questions and evaluating your responses.',
+      icon: '💬',
     },
     {
-      number: "04",
-      title: "Review & Improve",
-      description: "Access your performance dashboard to track progress, identify patterns, and focus on areas that need improvement.",
-      highlight: "Continuous Growth"
-    }
+      number: '04',
+      title: 'Get Instant Feedback',
+      description: 'Receive detailed analysis on content, delivery, confidence, and areas for improvement.',
+      icon: '📊',
+    },
+    {
+      number: '05',
+      title: 'Track Progress',
+      description: 'Monitor your improvement over time with detailed analytics and personalized recommendations.',
+      icon: '📈',
+    },
+    {
+      number: '06',
+      title: 'Ace Your Real Interview',
+      description: 'Go into your actual interview with confidence, preparation, and proven success.',
+      icon: '🏆',
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 pt-20 text-white">
+      <div className="container mx-auto px-6 py-16">
+        {/* Hero Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center max-w-4xl mx-auto mb-20"
+        >
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            How It <span className="text-blue-400">Works</span>
+            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              How It Works
+            </span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Four simple steps to interview mastery. Start practicing in minutes.
+          <p className="text-xl text-gray-300">
+            A simple 6-step process to transform your interview skills with AI-powered coaching
           </p>
-        </div>
+        </motion.div>
 
-        <div className="space-y-16">
-          {steps.map((step, index) => (
+        {/* Timeline */}
+        <div className="steps-container relative max-w-6xl mx-auto">
+          {/* Vertical Line */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full">
             <div 
-              key={index}
-              className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-12`}
-            >
-              <div className="flex-1">
-                <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl p-8 md:p-12 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 text-9xl font-bold text-white/5">
-                    {step.number}
-                  </div>
-                  <div className="relative z-10">
-                    <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-semibold mb-4">
-                      {step.highlight}
+              ref={timelineRef}
+              className="w-full h-full bg-gradient-to-b from-blue-500 to-purple-500 origin-top"
+              style={{ transformOrigin: 'top' }}
+            />
+          </div>
+
+          {/* Steps */}
+          <div className="space-y-20">
+            {steps.map((step, index) => (
+              <div
+                key={step.number}
+                ref={(el) => (stepsRef.current[index] = el)}
+                className={`relative flex items-center ${
+                  index % 2 === 0 ? 'justify-start' : 'justify-end'
+                }`}
+              >
+                {/* Step Content */}
+                <motion.div
+                  whileHover={{ 
+                    scale: 1.05,
+                    transition: { duration: 0.2 }
+                  }}
+                  className={`w-full md:w-5/12 bg-gray-800 rounded-2xl p-8 border border-gray-700 shadow-2xl ${
+                    index % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'
+                  }`}
+                >
+                  {/* Step Number & Icon */}
+                  <div className="flex items-center mb-6">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-lg opacity-50" />
+                      <div className="relative bg-gray-900 w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold border-2 border-blue-500">
+                        {step.number}
+                      </div>
                     </div>
-                    <div className="text-6xl font-bold text-white/30 mb-2">
-                      {step.number}
-                    </div>
+                    <div className="ml-4 text-4xl">{step.icon}</div>
                   </div>
+
+                  <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
+                  <p className="text-gray-300">{step.description}</p>
+                </motion.div>
+
+                {/* Timeline Dot */}
+                <div className="absolute left-1/2 transform -translate-x-1/2">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-4 border-gray-900 shadow-xl" />
                 </div>
               </div>
-              
-              <div className="flex-1">
-                <h3 className="text-3xl font-bold mb-4">{step.title}</h3>
-                <p className="text-xl text-gray-300 leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-24">
-          <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-12 border border-white/10 text-center">
-            <h2 className="text-3xl font-bold mb-4">See it in action</h2>
-            <p className="text-lg text-gray-300 mb-8">
-              Watch how our platform helps you prepare for success
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:opacity-90 transition-opacity">
-                Watch Demo
-              </button>
-              <button className="bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-colors border border-white/20">
-                Start Free Trial
-              </button>
-            </div>
+            ))}
           </div>
         </div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="mt-32 text-center"
+        >
+          <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl p-12 max-w-4xl mx-auto backdrop-blur-sm border border-white/10">
+            <h2 className="text-4xl font-bold mb-6">
+              Start Your Journey Today
+            </h2>
+            <p className="text-xl text-gray-300 mb-8">
+              No credit card required. Get instant access to all features.
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-10 py-4 rounded-full text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all"
+            >
+              Get Started Free
+            </motion.button>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
-};
-
-export default HowItWorks;
+}
