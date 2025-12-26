@@ -100,6 +100,34 @@ export default function HowItWorksPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 pt-20 text-white">
+
+              <div className=' pl-16 sm:pl-64'>
+                <motion.button
+                onClick={() => window.location.href = '/'}
+                className="flex items-center gap-2 mb-8 text-gray-300 hover:text-white transition-colors group"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ x: -5 }}
+              >
+                <motion.svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  animate={{ x: [0, -3, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </motion.svg>
+                <span className="text-lg font-medium">Back to Home</span>
+              </motion.button>
+              </div>
       <div className="container mx-auto px-6 py-16">
         {/* Hero Section */}
         <motion.div

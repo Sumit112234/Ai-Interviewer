@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { getUser, logout } from "@/app/context/auth";
 
 const Navbar = () => {
 
@@ -9,6 +10,18 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  
+    const [user, setUser] = useState(null)
+  
+    useEffect(() => {
+      async function fetchUser() {
+        const userData = await getUser()
+        setUser(userData?.user || null)
+        console.log({userData})
+      }
+      fetchUser()
+    },[])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +53,7 @@ const Navbar = () => {
 
   const handleNavClick = (path) => {
     console.log("Navigate to:", path);
+    router.push(path);
     setIsMobileMenuOpen(false);
   };
 
@@ -94,20 +108,36 @@ const Navbar = () => {
 
             {/* CTA Buttons - Right Side */}
             <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-              <button
-                onClick={() => handleNavClick("/login")}
-                className="hidden md:block px-3 lg:px-5 py-2 text-gray-300 hover:text-white transition-colors duration-300 text-xs lg:text-sm font-medium"
-              >
-                Sign In
-              </button>
               <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  if (!user) {
+                    handleNavClick("/login");
+                  } else {
+                    logout(); 
+                    setUser(null);
+                    router.push("/");
+                  }
+                }}
+                className={`px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-white font-semibold text-xs sm:text-sm shadow-lg transition-all duration-300 whitespace-nowrap
+                  ${
+                    user
+                      ? "bg-red-600 hover:bg-red-700 shadow-red-500/30"
+                      : "bg-green-600 hover:bg-green-700 shadow-green-500/30"
+                  }`}
+              >
+                {user ? "Log Out" : "Sign In"}
+              </motion.button>
+
+              {/* <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleNavClick("/login")}
                 className="px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300 whitespace-nowrap"
               >
                 Get Started
-              </motion.button>
+              </motion.button> */}
 
               {/* Mobile Menu Button */}
               <button

@@ -8,8 +8,8 @@ import { motion, useScroll, useTransform, AnimatePresence, useAnimation } from "
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-// import Navbar from "../components/Navbar";
 import Navbar from "@/components/Navbar";
+import { getUser } from "../context/auth";
 // import Footer from "../components/Footer";
 
 
@@ -57,6 +57,18 @@ export default function Dashboard() {
   gsap.registerPlugin(ScrollTrigger);
   const router = useRouter();
   const navigate = (path) => { router.push(path); };
+
+  
+      const [user, setUser] = useState(null)
+    
+      useEffect(() => {
+        async function fetchUser() {
+          const userData = await getUser()
+          setUser(userData?.user || null)
+        //  console.log({userData})
+        }
+        fetchUser()
+      },[])
   
   const { scrollY } = useScroll();
   const analyticsRef = useRef(null);
@@ -608,7 +620,7 @@ useEffect(() => {
             className="mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-lg mx-auto px-4"
           >
             <button
-              onClick={() => router.push('/login')}
+              onClick={() => user ? router.push('/Form') : router.push('/login?redirect=/Form')}
               className="group relative w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-500 dark:to-blue-500 text-white font-semibold text-base sm:text-lg shadow-lg shadow-purple-500/25 dark:shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/40 dark:hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105"
             >
               <span className="relative z-10">Start Practicing</span>

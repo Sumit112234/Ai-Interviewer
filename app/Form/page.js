@@ -38,20 +38,29 @@ export default function EnhancedResumeForm() {
   const router = useRouter()
 
     const [user, setUser] = useState(null)
-  
-    useEffect(() => {
-      async function fetchUser() {
+    async function fetchUser() {
+      try {
         const userData = await getUser()
         setUser(userData?.user || null)
-        console.log({userData})
+        if(!userData) throw new Error('Not authenticated')
+        // console.log({userData})
+      } catch (error) {
+        // console.log('Error fetching user:', error)
+         router.push('/login?redirect=/Form')
       }
+    }
+  
+    useEffect(() => {
       fetchUser()
     },[])
 
     useEffect(()=>{
-      if(!user) return ;
+      if(!user) 
+        {
+          return ;
+        }
 
-      console.log('coming here : ',user.name, user?.user?.name)
+     // console.log('coming here : ',user.name, user?.user?.name)
       setFormData({
         fullName:  user.name || "",
         email: user.email || "",
@@ -93,7 +102,7 @@ export default function EnhancedResumeForm() {
   }
 
   const handleFileSelect = (selectedFile) => {
-    console.log("Selected file:", selectedFile)
+   // console.log("Selected file:", selectedFile)
     if (!selectedFile) return
     setFile(selectedFile)
     setUploadSuccess(false)
@@ -118,7 +127,7 @@ export default function EnhancedResumeForm() {
 
       const data = await response.json()
       
-      console.log(data)
+    //  console.log(data)
       // Parse the raw_output JSON string
       let parsedData = {}
       try {
@@ -174,7 +183,7 @@ export default function EnhancedResumeForm() {
   }
 
   const handleStartInterview = async () => {
- console.log("Form Data Submitted:", formData, user)
+ //console.log("Form Data Submitted:", formData, user)
  
     if(!isFormValid) alert("Please fill in all required fields")
     try{
@@ -188,11 +197,11 @@ export default function EnhancedResumeForm() {
 
       if(!res.ok) throw new Error('Failed to update user')
       const data = await res.json()
-      console.log('User updated:',data.user)
+   //   console.log('User updated:',data.user)
 
       localStorage.setItem("resumeData", JSON.stringify(formData))
       router.push("/interview")
-      console.log("Interview started with data:", formData)
+     // console.log("Interview started with data:", formData)
     }
     catch(e){
       alert('something went wrong')
@@ -294,7 +303,7 @@ export default function EnhancedResumeForm() {
           >
             <div className="flex justify-center gap-4">
               <motion.div
-                onClick={() => console.log("upload clicked")}
+              
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-semibold text-lg transition-all ${
@@ -563,7 +572,7 @@ export default function EnhancedResumeForm() {
                     {completedFields.size}/6 required fields completed
                   </p>
                 </motion.div>
-{console.log({formData, completedFields})}
+{/* {console.log({formData, completedFields})} */}
                 <Card
   className="
     relative overflow-hidden rounded-[2.5rem]

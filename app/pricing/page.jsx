@@ -84,12 +84,12 @@ export default function PricingPage() {
       ],
       cta: 'Get Started Free',
       popular: false,
-      gradient: 'from-gray-400 to-gray-600',
+      gradient: 'from-gray-500 to-gray-700',
     },
     {
       name: 'Pro',
-      price: '$29',
-      period: '/month',
+      price: 'Coming Soon',
+      period: '',
       description: 'Most popular for serious job seekers',
       features: [
         'Unlimited AI Mock Interviews',
@@ -101,9 +101,9 @@ export default function PricingPage() {
         'Interview Templates',
         'Career Coaching Tips',
       ],
-      cta: 'Start Free Trial',
+      cta: 'Coming Soon',
       popular: true,
-      gradient: 'from-blue-500 to-purple-500',
+      gradient: 'from-purple-600 to-purple-800',
     },
     {
       name: 'Enterprise',
@@ -122,24 +122,49 @@ export default function PricingPage() {
       ],
       cta: 'Contact Sales',
       popular: false,
-      gradient: 'from-green-500 to-teal-500',
+      gradient: 'from-gray-600 to-gray-800',
     },
   ];
 
+  const handleBackToHome = () => {
+    window.location.href = '/';
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-20 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-gray-900 pt-20 overflow-hidden">
       {/* Background Particles */}
       <div className="fixed inset-0 pointer-events-none">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="particle absolute w-1 h-1 bg-blue-200 rounded-full opacity-30"
+            className="particle absolute w-1 h-1 bg-purple-500/30 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
             }}
           />
         ))}
+      </div>
+
+      {/* Back to Home Button */}
+      <div className="container mx-auto px-6 pt-6 relative z-20">
+        <motion.button
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          onClick={handleBackToHome}
+          className="group flex items-center text-gray-300 hover:text-white transition-colors"
+        >
+          <svg 
+            className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Home
+        </motion.button>
       </div>
 
       <div className="container mx-auto px-6 py-16 relative z-10">
@@ -151,12 +176,15 @@ export default function PricingPage() {
           className="text-center max-w-4xl mx-auto mb-16"
         >
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-500 to-purple-300 bg-clip-text text-transparent">
               Simple, Transparent Pricing
             </span>
           </h1>
-          <p className="text-xl text-gray-600">
-            Start free, upgrade when you're ready. No hidden fees, no surprises.
+          <p className="text-xl text-gray-300">
+            <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent font-bold">
+              Now it's free for all
+            </span>
+            <span className="text-gray-400"> - Paid version coming soon!</span>
           </p>
         </motion.div>
 
@@ -180,53 +208,57 @@ export default function PricingPage() {
                   transition={{ delay: 0.5 }}
                   className="absolute -top-4 left-1/2 transform -translate-x-1/2"
                 >
-                  <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
-                    MOST POPULAR
+                  <div className="bg-gradient-to-r from-purple-700 to-pink-700 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-purple-900/50">
+                    COMING SOON
                   </div>
                 </motion.div>
               )}
 
-              <div className={`bg-white rounded-3xl p-8 border-2 ${
-                plan.popular ? 'border-blue-500 shadow-2xl' : 'border-gray-200'
-              } h-full flex flex-col`}>
+              <div className={`bg-gradient-to-b from-gray-900 to-black rounded-3xl p-8 border-2 ${
+                plan.popular ? 'border-purple-600 shadow-2xl shadow-purple-900/30' : 'border-gray-800'
+              } h-full flex flex-col backdrop-blur-sm bg-gray-900/50`}>
                 <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{plan.name}</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
                   <div className="flex items-baseline mb-2">
-                    <span className="text-5xl font-bold text-gray-900">{plan.price}</span>
-                    <span className="text-gray-600 ml-2">{plan.period}</span>
+                    <span className="text-5xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+                      {plan.price}
+                    </span>
+                    {plan.period && (
+                      <span className="text-gray-400 ml-2">{plan.period}</span>
+                    )}
                   </div>
-                  <p className="text-gray-600">{plan.description}</p>
+                  <p className="text-gray-400">{plan.description}</p>
                 </div>
 
                 <div className="flex-grow mb-8">
                   <ul className="space-y-4">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3">
-                          <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-6 h-6 rounded-full bg-purple-900/30 flex items-center justify-center mr-3">
+                          <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-700">{feature}</span>
+                        <span className="text-gray-300">{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="mt-auto">
-                  <Link href={plan.name === 'Enterprise' ? '/contact' : '/'}>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`w-full py-4 rounded-xl font-bold text-lg ${
-                        plan.popular
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl'
-                          : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                      } transition-all`}
-                    >
-                      {plan.cta}
-                    </motion.button>
-                  </Link>
+                  <button
+                    onClick={plan.name === 'Free Forever' ? handleBackToHome : undefined}
+                    className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
+                      plan.name === 'Free Forever'
+                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:shadow-xl hover:shadow-purple-900/30 cursor-pointer'
+                        : plan.popular
+                        ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-gray-400 border border-gray-700 cursor-not-allowed'
+                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700 cursor-pointer'
+                    }`}
+                    disabled={plan.popular}
+                  >
+                    {plan.cta}
+                  </button>
                 </div>
               </div>
             </motion.div>
@@ -241,22 +273,22 @@ export default function PricingPage() {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto"
         >
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+          <h2 className="text-3xl font-bold text-center mb-12 text-white">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
             {[
               {
                 q: 'Is there really a free plan?',
-                a: 'Yes! Our free plan includes 5 AI mock interviews per month with basic feedback - perfect for getting started.',
+                a: 'Yes! Our service is completely free for now. Enjoy unlimited access to all features without any cost.',
               },
               {
-                q: 'Can I cancel anytime?',
-                a: 'Absolutely. You can cancel your subscription at any time with no hidden fees or penalties.',
+                q: 'When will paid plans be available?',
+                a: 'We\'re working on advanced features for paid plans. They\'ll be released soon with enhanced capabilities.',
               },
               {
-                q: 'Do you offer refunds?',
-                a: 'We offer a 14-day money-back guarantee for all paid plans if you are not satisfied.',
+                q: 'Will the free plan always be available?',
+                a: 'Yes! The free plan will always remain available with generous features, even after paid plans launch.',
               },
               {
                 q: 'How does the AI feedback work?',
@@ -270,10 +302,10 @@ export default function PricingPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl p-6 shadow-lg border border-gray-200"
+                className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 hover:border-purple-800/50 transition-colors"
               >
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{faq.q}</h3>
-                <p className="text-gray-600">{faq.a}</p>
+                <h3 className="text-xl font-bold text-white mb-2">{faq.q}</h3>
+                <p className="text-gray-400">{faq.a}</p>
               </motion.div>
             ))}
           </div>
@@ -287,32 +319,23 @@ export default function PricingPage() {
           viewport={{ once: true }}
           className="text-center mt-20"
         >
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-3xl p-12 max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">
+          <div className="bg-gradient-to-r from-gray-900/80 to-purple-900/20 rounded-3xl p-12 max-w-4xl mx-auto border border-gray-800 backdrop-blur-sm">
+            <h2 className="text-4xl font-bold text-white mb-6">
               Start Your Journey Today
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Join 50,000+ professionals who transformed their interview skills
+            <p className="text-xl text-gray-300 mb-8">
+              Join thousands of professionals who transformed their interview skills - <span className="text-purple-400">Completely Free!</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
-                >
-                  Start Free Trial
-                </motion.button>
-              </Link>
-              <Link href="/how-it-works">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="border-2 border-blue-600 text-blue-600 px-10 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition-all"
-                >
-                  Book a Demo
-                </motion.button>
-              </Link>
+              <button
+                onClick={handleBackToHome}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-10 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl hover:shadow-purple-900/30 transition-all"
+              >
+                Get Started Free
+              </button>
+              <button className="border-2 border-purple-600 text-purple-400 px-10 py-4 rounded-full text-lg font-semibold hover:bg-purple-900/20 transition-all">
+                Join Waitlist for Pro
+              </button>
             </div>
           </div>
         </motion.div>
