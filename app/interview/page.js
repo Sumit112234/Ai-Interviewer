@@ -29,6 +29,7 @@ import AIAvatar from "@/components/AIAvatar"
 import CodeIDETestModal from "@/components/CodeIDETestModal"
 import InterviewTimer from "@/components/InterviewTimer"
 import { getUser } from "../context/auth"
+import InterviewMode from "./Full-screen-modal"
 
 export default function InterviewPage() {
 
@@ -82,7 +83,203 @@ export default function InterviewPage() {
     // alert("Code IDE Submission Received:\n\n" + codeSnippet + language)
   }
 
+  ////// full screen
+
+   const [showModal, setShowModal] = useState(true);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [interviewStarted, setInterviewStarted] = useState(false);
+    const [warningMessage, setWarningMessage] = useState('');
   
+    // Check if already in fullscreen
+    const checkFullscreen = useCallback(() => {
+      return !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
+    }, []);
+  
+    // Enter fullscreen
+    const enterFullscreen = useCallback(async () => {
+      try {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          await elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          await elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          await elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) {
+          await elem.msRequestFullscreen();
+        }
+        setIsFullscreen(true);
+        setShowModal(false);
+        setInterviewStarted(true);
+      } catch (err) {
+        console.error('Error entering fullscreen:', err);
+        setWarningMessage('Please allow fullscreen mode to continue');
+      }
+    }, []);
+  
+    // Exit fullscreen
+    const exitFullscreen = useCallback(() => {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      setIsFullscreen(false);
+    }, []);
+  
+    // Handle go back
+    const handleGoBack = () => {
+      if (isFullscreen) {
+        exitFullscreen();
+      }
+      window.history.back();
+    };
+  
+    // Prevent context menu (right-click)
+    useEffect(() => {
+      const preventContextMenu = (e) => {
+        if (interviewStarted) {
+          e.preventDefault();
+          return false;
+        }
+      };
+  
+      document.addEventListener('contextmenu', preventContextMenu);
+      return () => document.removeEventListener('contextmenu', preventContextMenu);
+    }, [interviewStarted]);
+  
+    // Prevent keyboard shortcuts
+    useEffect(() => {
+      const preventKeyboardShortcuts = (e) => {
+        if (!interviewStarted) return;
+  
+        // Prevent F-keys (F1-F12)
+        if (e.key.startsWith('F') && e.key.length <= 3) {
+          e.preventDefault();
+          return false;
+        }
+  
+        // Prevent Ctrl/Cmd combinations
+        if (e.ctrlKey || e.metaKey) {
+          // Prevent common shortcuts
+          const blockedKeys = ['c', 'v', 'x', 'a', 's', 'p', 'u', 'shift', 'i', 'j', 'k'];
+          if (blockedKeys.includes(e.key.toLowerCase())) {
+            e.preventDefault();
+            return false;
+          }
+  
+          // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (dev tools)
+          if (e.shiftKey && ['i', 'j', 'c', 'k'].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+            return false;
+          }
+        }
+  
+        // Prevent Alt combinations
+        if (e.altKey) {
+          e.preventDefault();
+          return false;
+        }
+  
+        // Prevent specific keys
+        const blockedStandaloneKeys = ['F12', 'PrintScreen', 'ContextMenu'];
+        if (blockedStandaloneKeys.includes(e.key)) {
+          e.preventDefault();
+          return false;
+        }
+      };
+  
+      document.addEventListener('keydown', preventKeyboardShortcuts);
+      return () => document.removeEventListener('keydown', preventKeyboardShortcuts);
+    }, [interviewStarted]);
+  
+    // Detect fullscreen changes
+    useEffect(() => {
+      const handleFullscreenChange = () => {
+        const isNowFullscreen = checkFullscreen();
+        setIsFullscreen(isNowFullscreen);
+        
+        // If user exits fullscreen during interview, show modal
+        if (!isNowFullscreen && interviewStarted) {
+          setShowModal(true);
+          setWarningMessage('You exited fullscreen mode. Please return to fullscreen to continue.');
+        }
+      };
+  
+      document.addEventListener('fullscreenchange', handleFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.addEventListener('msfullscreenchange', handleFullscreenChange);
+  
+      return () => {
+        document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.removeEventListener('msfullscreenchange', handleFullscreenChange);
+      };
+    }, [interviewStarted, checkFullscreen]);
+  
+    // Detect tab visibility changes
+    useEffect(() => {
+      const handleVisibilityChange = () => {
+        if (document.hidden && interviewStarted && isFullscreen) {
+          setShowModal(true);
+          setWarningMessage('Tab switching detected! Please return to the interview.');
+        }
+      };
+  
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, [interviewStarted, isFullscreen]);
+  
+    // Detect window blur (user switching windows)
+    useEffect(() => {
+      const handleBlur = () => {
+        if (interviewStarted && isFullscreen) {
+          setShowModal(true);
+          setWarningMessage('Window focus lost! Please stay in the interview window.');
+        }
+      };
+  
+      window.addEventListener('blur', handleBlur);
+      return () => window.removeEventListener('blur', handleBlur);
+    }, [interviewStarted, isFullscreen]);
+  
+    // Handle clicks outside modal to reopen it
+    const handleScreenClick = (e) => {
+      if (!isFullscreen  && !showModal) {
+        setShowModal(true);
+      }
+    };
+  
+    // Handle modal close attempt
+    const handleCloseModal = (e) => {
+      e.stopPropagation();
+      if (!isFullscreen) {
+        setShowModal(false);
+        setWarningMessage('You must enter fullscreen mode to continue.');
+      }
+    };
+  
+    // Handle submit button (demo)
+    const handleSubmit = () => {
+      if (window.confirm('Are you sure you want to submit the interview?')) {
+        exitFullscreen();
+        alert('Interview submitted successfully!');
+        window.history.back();
+      }
+    };
+
+  ////// full screen
 
   useEffect(()=>{
     if(ideData.ideStatus === false)
@@ -505,8 +702,10 @@ useEffect(() => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+    <div onClick={handleScreenClick} className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+     <InterviewMode showModal={showModal} setShowModal={setShowModal}/>
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-md">
+
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <Button

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { AlertCircle, Maximize2, ArrowLeft } from 'lucide-react';
 
-export default function InterviewMode() {
-  const [showModal, setShowModal] = useState(true);
+export default function InterviewMode({showModal,setShowModal}) {
+  
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [interviewStarted, setInterviewStarted] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
@@ -196,14 +196,16 @@ export default function InterviewMode() {
     }
   };
 
+  if(!showModal) return null
+
   return (
-    <div 
-      className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative"
-      onClick={handleScreenClick}
-    >
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+
+    <>
+
+       <div className='relative z-50 '>
+
+
+      <div className="fixed inset-0 bg-black/80 flex items-center justify-center  p-4">
           <div 
             className="bg-gradient-to-b from-gray-900 to-black border-2 border-blue-700 rounded-2xl shadow-2xl max-w-md w-full p-8 relative"
             onClick={(e) => e.stopPropagation()}
@@ -294,10 +296,116 @@ export default function InterviewMode() {
             </div>
           </div>
         </div>
-      )}
+
+        </div>
+    
+  
+
+    </>
+  );
+}
+
+  // <div 
+  //     className="bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative"
+  //     onClick={handleScreenClick}
+  //   >
+  //     {/* Modal */}
+  //     {showModal && (
+  //       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+  //         <div 
+  //           className="bg-gradient-to-b from-gray-900 to-black border-2 border-blue-700 rounded-2xl shadow-2xl max-w-md w-full p-8 relative"
+  //           onClick={(e) => e.stopPropagation()}
+  //         >
+  //           {/* Close button */}
+  //           {!interviewStarted && (
+  //             <button
+  //               onClick={handleCloseModal}
+  //               className="absolute top-4 right-4 text-purple-400 hover:text-purple-300 transition-colors"
+  //             >
+  //               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  //                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  //               </svg>
+  //             </button>
+  //           )}
+
+  //           {/* Icon */}
+  //           <div className="flex justify-center mb-6">
+  //             <div className="w-20 h-20 bg-gradient-to-br from-blue-800 to-purple-800 rounded-full flex items-center justify-center shadow-lg">
+  //               <Maximize2 className="w-10 h-10 text-white" />
+  //             </div>
+  //           </div>
+
+  //           {/* Title */}
+  //           <h2 className="text-3xl font-bold text-center mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+  //             Full Screen Required
+  //           </h2>
+
+  //           {/* Warning message */}
+  //           {warningMessage && (
+  //             <div className="mb-6 p-4 bg-gradient-to-r from-purple-900/50 to-blue-900/50 border border-purple-700 rounded-xl">
+  //               <div className="flex items-center">
+  //                 <AlertCircle className="w-5 h-5 text-purple-400 mr-3 flex-shrink-0" />
+  //                 <p className="text-sm text-purple-200 font-medium">{warningMessage}</p>
+  //               </div>
+  //             </div>
+  //           )}
+
+  //           {/* Instructions */}
+  //           <div className="mb-8 space-y-4">
+  //             <p className="text-blue-200 text-center text-lg">
+  //               This interview requires full screen mode for security and focus.
+  //             </p>
+              
+  //             <div className="bg-gradient-to-r from-gray-800/50 to-blue-900/30 rounded-xl p-5 border border-blue-800/50">
+  //               <p className="font-bold text-blue-300 mb-3 text-lg">Important Instructions:</p>
+  //               <ul className="space-y-2.5">
+  //                 <li className="flex items-center text-gray-300">
+  //                   <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+  //                   <span>You cannot exit until you click Submit</span>
+  //                 </li>
+  //                 <li className="flex items-center text-gray-300">
+  //                   <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+  //                   <span>Tab switching is not allowed</span>
+  //                 </li>
+  //                 <li className="flex items-center text-gray-300">
+  //                   <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+  //                   <span>Right-click is disabled</span>
+  //                 </li>
+  //                 <li className="flex items-center text-gray-300">
+  //                   <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+  //                   <span>Keyboard shortcuts are blocked</span>
+  //                 </li>
+  //                 <li className="flex items-center text-gray-300">
+  //                   <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+  //                   <span>Developer tools are restricted</span>
+  //                 </li>
+  //               </ul>
+  //             </div>
+  //           </div>
+
+  //           {/* Buttons */}
+  //           <div className="flex gap-4">
+  //             <button
+  //               onClick={handleGoBack}
+  //               className="flex-1 px-6 py-4 bg-gradient-to-r from-gray-800 to-gray-900 border border-blue-800 rounded-xl text-blue-200 hover:from-gray-700 hover:to-gray-800 transition-all duration-300 flex items-center justify-center gap-3 font-bold text-lg hover:border-blue-600"
+  //             >
+  //               <ArrowLeft className="w-5 h-5" />
+  //               Go Back
+  //             </button>
+  //             <button
+  //               onClick={enterFullscreen}
+  //               className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-700 to-purple-700 text-white rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 flex items-center justify-center gap-3 font-bold text-lg shadow-lg hover:shadow-blue-500/25"
+  //             >
+  //               <Maximize2 className="w-5 h-5" />
+  //               Enter Fullscreen
+  //             </button>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     )}
 
       {/* Interview Content */}
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      {/* <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="bg-gradient-to-br from-gray-900 to-black border-2 border-blue-800 rounded-2xl shadow-2xl p-10">
           <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Interview Session
@@ -357,7 +465,5 @@ export default function InterviewMode() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
+      </div> */}
+    {/* </div> */}
