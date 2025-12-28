@@ -14,6 +14,8 @@ import {
 } from "lucide-react"
 import { getUser } from "../context/auth"
 import { useRouter } from "next/navigation"
+import Instructions from "@/components/Instruction"
+import InterviewMode from "../interview/Full-screen-modal"
 
 export default function EnhancedResumeForm() {
   const [theme, setTheme] = useState("light")
@@ -22,6 +24,7 @@ export default function EnhancedResumeForm() {
   const [dragActive, setDragActive] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [insOpen, setInsOpen] = useState(false)
   
   const [formData, setFormData] = useState({
     fullName: "",
@@ -197,10 +200,11 @@ export default function EnhancedResumeForm() {
 
       if(!res.ok) throw new Error('Failed to update user')
       const data = await res.json()
-   //   console.log('User updated:',data.user)
+    //  console.log('User updated:',data.user)
 
       localStorage.setItem("resumeData", JSON.stringify(formData))
-      router.push("/interview")
+      setInsOpen(true)
+    
      // console.log("Interview started with data:", formData)
     }
     catch(e){
@@ -234,6 +238,8 @@ export default function EnhancedResumeForm() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(124,58,237,0.18),transparent_60%)]"/>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(59,130,246,0.12),transparent_60%)]"/>
 
+     {insOpen &&  <Instructions isOpen={insOpen} setIsOpen={setInsOpen} />}
+      {/* <InterviewMode/> */}
       {/* Header */}
       <motion.header 
         className="relative z-10 border-b border-white/20 bg-white/10 dark:bg-black/20 backdrop-blur-xl"

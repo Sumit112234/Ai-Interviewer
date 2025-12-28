@@ -49,6 +49,10 @@ const InterviewTimer = ({ initialSeconds = -1, onTimesUp, isInterviewStarted }) 
   const time = formatTime(seconds);
   const progress = (seconds / initialSeconds) * 100;
 
+  if (initialSeconds < 0) {
+    return null; // Don't render if no timer is set
+  } 
+
   return (
     <div className={`
       relative flex items-center gap-2 px-4 py-2 rounded-lg border backdrop-blur-sm
