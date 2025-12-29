@@ -68,6 +68,7 @@ export default function InterviewPage() {
   const [timeForQuestion, setTimeForQuestion] = useState(-1)
   const [showIde, setShowIde] = useState(false)
   const [ideData, setIdeData] = useState({ideStatus : false, question: "Implement a function to reverse a linked list.", codeType : "write"})
+  const [resetTime, setResetTime] = useState(false)
 
   const onIdeSubmit = async (codeSnippet, language, skip=false) => {
     if(skip)
@@ -379,6 +380,7 @@ export default function InterviewPage() {
 
 
 const sendFrameToPython = async () => {
+  return 
   if (!videoRef.current) return
 
   const canvas = document.createElement("canvas")
@@ -536,6 +538,7 @@ useEffect(() => {
         const newQuestion = data.question
         setCurrentQuestion(newQuestion)
         setTimeForQuestion(data.time || 60)
+        setResetTime(pre => !pre)
 
         if(data.ide)
         {
@@ -721,7 +724,7 @@ useEffect(() => {
               
                 <InterviewTimer 
                     initialSeconds={timeForQuestion} 
-                    // initialSeconds={10} 
+                    resetTime={resetTime}
                     isInterviewStarted = {isInterviewStarted}
                     onTimesUp={async () => {
                       await handleUserResponse("Times up !", 0.0)

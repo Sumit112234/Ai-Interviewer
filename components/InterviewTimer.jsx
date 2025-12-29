@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, AlertCircle } from 'lucide-react';
 
-const InterviewTimer = ({ initialSeconds = -1, onTimesUp, isInterviewStarted }) => {
+const InterviewTimer = ({ resetTime,initialSeconds = -1, onTimesUp, isInterviewStarted }) => {
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isWarning, setIsWarning] = useState(false);
   const [isCritical, setIsCritical] = useState(false);
@@ -10,7 +10,9 @@ const InterviewTimer = ({ initialSeconds = -1, onTimesUp, isInterviewStarted }) 
 
   useEffect(() => {
     setSeconds(initialSeconds);
-  }, [initialSeconds]);
+     setIsWarning(false);
+      setIsCritical(false);
+  }, [resetTime]);
 
   useEffect(() => {
     // Warning state when 30 seconds or less
@@ -47,11 +49,11 @@ const InterviewTimer = ({ initialSeconds = -1, onTimesUp, isInterviewStarted }) 
   };
 
   const time = formatTime(seconds);
-  const progress = (seconds / initialSeconds) * 100;
-
+  
   if (initialSeconds < 0) {
     return null; // Don't render if no timer is set
   } 
+  const progress = (seconds / initialSeconds) * 100;
 
   return (
     <div className={`
