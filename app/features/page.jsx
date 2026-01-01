@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -136,6 +137,7 @@ const Features = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white py-20 px-6 relative overflow-hidden">
       {/* Animated background elements */}
+      <Navbar/>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
@@ -169,7 +171,7 @@ const Features = () => {
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Back Button */}
-        <motion.button
+        {/* <motion.button
           onClick={handleBack}
           className="flex items-center gap-2 mb-8 text-gray-300 hover:text-white transition-colors group"
           initial={{ opacity: 0, x: -20 }}
@@ -193,7 +195,7 @@ const Features = () => {
             />
           </motion.svg>
           <span className="text-lg font-medium">Back to Home</span>
-        </motion.button>
+        </motion.button> */}
 
         <div className="text-center mb-16">
           <h1 ref={headingRef} className="text-5xl md:text-6xl font-bold mb-6">

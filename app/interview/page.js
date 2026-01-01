@@ -540,6 +540,8 @@ useEffect(() => {
         setTimeForQuestion(data.time || 60)
         setResetTime(pre => !pre)
 
+        // setResetTime(!resetTime)
+
         if(data.ide)
         {
 
@@ -1070,6 +1072,8 @@ useEffect(() => {
     </div>
   )
 }
+
+
 
 
 // ---------------------

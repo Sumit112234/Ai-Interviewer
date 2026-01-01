@@ -16,6 +16,7 @@ import { getUser } from "../context/auth"
 import { useRouter } from "next/navigation"
 import Instructions from "@/components/Instruction"
 import InterviewMode from "../interview/Full-screen-modal"
+import Navbar from "@/components/Navbar"
 
 export default function EnhancedResumeForm() {
   const [theme, setTheme] = useState("light")
@@ -241,6 +242,7 @@ export default function EnhancedResumeForm() {
      {insOpen &&  <Instructions isOpen={insOpen} setIsOpen={setInsOpen} />}
       {/* <InterviewMode/> */}
       {/* Header */}
+      <Navbar/>
       <motion.header 
         className="relative z-10 border-b border-white/20 bg-white/10 dark:bg-black/20 backdrop-blur-xl"
         initial={{ y: -50, opacity: 0 }}
@@ -248,7 +250,8 @@ export default function EnhancedResumeForm() {
         transition={{ duration: 0.8 }}
       >
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <motion.div 
+-
+          {/* <motion.div 
             className="flex items-center space-x-3"
             whileHover={{ scale: 1.05 }}
           >
@@ -258,7 +261,7 @@ export default function EnhancedResumeForm() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">
               AI Resume Interviewer
             </h1>
-          </motion.div>
+          </motion.div> */}
           {/* <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
             <Button 
               variant="ghost" 

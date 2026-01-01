@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { getUser, logout } from "@/app/context/auth";
+import Image from "next/image";
 
 const Navbar = () => {
 
@@ -84,9 +85,10 @@ const Navbar = () => {
               onClick={() => handleNavClick("/")}
             >
               <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
-                <span className="text-base sm:text-lg">🎯</span>
+                <Image className="object-contain" src="/Ai-interviewer-logo.png" alt="Logo" width={100} height={100} />
+                {/* <span className="text-base sm:text-lg">🎯</span> */}
               </div>
-              <span className="text-white font-bold text-sm sm:text-lg hidden xs:block">
+              <span className="text-white font-bold text-sm sm:text-lg sm:hidden xs:block">
                 AI Interviewer
               </span>
             </motion.div>

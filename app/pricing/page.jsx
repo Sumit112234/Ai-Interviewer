@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Link from 'next/link';
+import Navbar from '@/components/Navbar';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -147,7 +148,10 @@ export default function PricingPage() {
       </div>
 
       {/* Back to Home Button */}
-      <div className="container mx-auto px-6 pt-6 relative z-20">
+
+        <Navbar/>
+
+      {/* <div className="container mx-auto px-6 pt-6 relative z-20">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -165,7 +169,7 @@ export default function PricingPage() {
           </svg>
           Back to Home
         </motion.button>
-      </div>
+      </div> */}
 
       <div className="container mx-auto px-6 py-16 relative z-10">
         {/* Hero Section */}

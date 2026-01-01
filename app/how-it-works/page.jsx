@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Navbar from '@/components/Navbar';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -101,7 +102,9 @@ export default function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 pt-20 text-white">
 
-              <div className=' pl-16 sm:pl-64'>
+
+      <Navbar/>
+              {/* <div className=' pl-16 sm:pl-64'>
                 <motion.button
                 onClick={() => window.location.href = '/'}
                 className="flex items-center gap-2 mb-8 text-gray-300 hover:text-white transition-colors group"
@@ -127,7 +130,7 @@ export default function HowItWorksPage() {
                 </motion.svg>
                 <span className="text-lg font-medium">Back to Home</span>
               </motion.button>
-              </div>
+              </div> */}
       <div className="container mx-auto px-6 py-16">
         {/* Hero Section */}
         <motion.div

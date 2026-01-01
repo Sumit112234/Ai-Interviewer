@@ -93,6 +93,20 @@ export default function InterviewMode({showModal,setShowModal}) {
           e.preventDefault();
           return false;
         }
+        
+        if(e.key.toLowerCase() === 'r') {
+
+          let confirmReload = window.confirm("Reloading the page will exit the interview. Do you want to proceed?");
+          if (confirmReload) {
+            exitFullscreen();
+            window.location.reload();
+          }
+          else{
+            e.preventDefault();
+          }
+          
+          return false;
+        }
 
         // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (dev tools)
         if (e.shiftKey && ['i', 'j', 'c', 'k'].includes(e.key.toLowerCase())) {
