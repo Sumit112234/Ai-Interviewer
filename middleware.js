@@ -1,3 +1,43 @@
+// import { NextResponse } from "next/server"
+// import type { NextRequest } from "next/server"
+
+// const AUTH_COOKIE = "auth_token"
+
+// /* Pages that do NOT require login */
+// const PUBLIC_PATHS = ["/login", "/signup"]
+
+// /* Pages that REQUIRE login */
+// const PROTECTED_PATHS = ["/report", "/interview", "/Form"]
+
+// export function middleware(request: NextRequest) {
+//   const { pathname } = request.nextUrl
+//   const token = request.cookies.get(AUTH_COOKIE)?.value
+
+//   const isPublic = PUBLIC_PATHS.includes(pathname)
+//   const isProtected = PROTECTED_PATHS.includes(pathname)
+
+//   /* ❌ Not logged in → block protected pages */
+//   if (!token && isProtected) {
+//     const url = request.nextUrl.clone()
+//     url.pathname = "/login"
+//     return NextResponse.redirect(url)
+//   }
+
+//   /* ❌ Logged in → block login/signup */
+//   if (token && isPublic) {
+//     const url = request.nextUrl.clone()
+//     url.pathname = "/dashboard"
+//     return NextResponse.redirect(url)
+//   }
+
+//   return NextResponse.next()
+// }
+
+
+
+
+// =======================
+
 import { NextResponse } from "next/server"
 
 export function middleware(request) {
@@ -10,6 +50,7 @@ export const config = {
   matcher: ["/login", "/signup", "/dashboard", "/profile"],
 }
 
+// -----------------------
 
 // import { NextResponse } from "next/server"
 

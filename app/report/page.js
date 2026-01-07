@@ -40,7 +40,7 @@ export default function ReportPage() {
 
   const generateEvaluation = async (data) => {
 
-    console.log("Generating evaluation for data:", data)
+   // console.log("Generating evaluation for data:", data)
     setIsLoading(true)
     try {
       const response = await fetch("/api/evaluate-interview", {

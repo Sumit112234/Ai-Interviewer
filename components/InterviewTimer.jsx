@@ -6,7 +6,7 @@ const InterviewTimer = ({ resetTime,initialSeconds = -1, onTimesUp, isInterviewS
   const [isWarning, setIsWarning] = useState(false);
   const [isCritical, setIsCritical] = useState(false);
 
-  console.log('InterviewTimer rendered with initialSeconds:', initialSeconds);
+  // console.log('InterviewTimer rendered with initialSeconds:', initialSeconds);
 
   useEffect(() => {
     setSeconds(initialSeconds);

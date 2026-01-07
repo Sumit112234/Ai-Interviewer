@@ -89,7 +89,9 @@ export default function InterviewPage() {
    const [showModal, setShowModal] = useState(true);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [interviewStarted, setInterviewStarted] = useState(false);
+    
     const [warningMessage, setWarningMessage] = useState('');
+    const violationCounter = useRef(0)
   
     // Check if already in fullscreen
     const checkFullscreen = useCallback(() => {
@@ -125,6 +127,7 @@ export default function InterviewPage() {
   
     // Exit fullscreen
     const exitFullscreen = useCallback(() => {
+      console.log("Exiting fullscreen from main page...");
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.webkitExitFullscreen) {
@@ -406,13 +409,13 @@ const sendFrameToPython = async () => {
   else console.log("AI Monitor:", data)
 }
 
-useEffect(() => {
-  // setTimeout(() => {
-  //   sendFrameToPython()
-  // },2000)
-  const interval = setInterval(sendFrameToPython, 3000)
-  return () => clearInterval(interval)
-}, [])
+// useEffect(() => {
+//   // setTimeout(() => {
+//   //   sendFrameToPython()
+//   // },2000)
+//   const interval = setInterval(sendFrameToPython, 3000)
+//   return () => clearInterval(interval)
+// }, [])
 
   
 
@@ -708,7 +711,7 @@ useEffect(() => {
 
   return (
     <div onClick={handleScreenClick} className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-     <InterviewMode showModal={showModal} setShowModal={setShowModal}/>
+     <InterviewMode violationCounter={violationCounter} showModal={showModal} setShowModal={setShowModal}/>
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-md">
 
         <div className="container mx-auto px-4 py-3">
@@ -963,6 +966,7 @@ useEffect(() => {
                   {!isInterviewStarted ? (
                     <Button
                       onClick={startInterview}
+                      disabled={!isFullscreen}
                       className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium px-6"
                       size="sm"
                     >

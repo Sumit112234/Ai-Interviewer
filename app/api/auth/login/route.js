@@ -8,7 +8,7 @@ const AUTH_COOKIE = "auth_token"
 
 export async function POST(request) {
   try {
-    const { email, password } = await request.json()
+    const { email, password, provider } = await request.json()
     if (!email || !password) {
       return NextResponse.json({ error: "Missing credentials" }, { status: 400 })
     }

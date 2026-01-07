@@ -19,13 +19,16 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please provide a password'],
-    minlength: 6
+    required: false
   },
   role: {
     type: String,
     default: ''
   },
+  provider: {
+  type: String,
+  default: "credentials",
+ },
   education: {
    type : String,
   },

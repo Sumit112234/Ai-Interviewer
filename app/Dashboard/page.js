@@ -627,7 +627,9 @@ useEffect(() => {
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-400 to-blue-400 opacity-0 group-hover:opacity-100 blur transition-opacity duration-300"></div>
             </button>
 
-            <button className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold text-base sm:text-lg hover:border-gray-400 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm">
+            <button 
+            onClick={() => user ? router.push('/Form') : router.push('/login?redirect=/Form')}
+            className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 rounded-full border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold text-base sm:text-lg hover:border-gray-400 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-all duration-300 backdrop-blur-sm">
               Watch Demo
             </button>
           </motion.div>

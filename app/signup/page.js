@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { UserPlus, Loader2, Mail, Lock, User, ArrowLeft, Sparkles } from "lucide-react"
+import { register } from "../context/auth"
 
 // Rocket Illustration Component
 const RocketIllustration = ({ isFormValid }) => {
@@ -197,23 +198,15 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password
-        })
-      })
 
-      const data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong")
+      const data = await register(formData.name, formData.email, formData.password, false)
+
+      if (data.error) {
+        throw new Error(data.msg || "Something went wrong")
       }
+
+      // console.log(data)
 
       window.location.href = "/"
     } catch (err) {

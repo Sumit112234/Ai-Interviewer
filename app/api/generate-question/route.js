@@ -804,7 +804,7 @@ export async function POST(request) {
       if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   
   
-  try {
+  // try {
     const body = await request.json()
     const {
       resumeData,
@@ -1092,8 +1092,8 @@ REMEMBER:
       codeSnippet,
       expectedLanguage
     })
-  } catch (error) {
-    console.error("❌ Error generating question:", error?.message || error)
-    return Response.json({ error: "Failed to generate question" }, { status: 500 })
-  }
+  // } catch (error) {
+  //   console.error("❌ Error generating question:", error?.message || error)
+  //   return Response.json({ error: "Failed to generate question" }, { status: 500 })
+  // }
 }

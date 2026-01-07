@@ -1,11 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AlertCircle, Maximize2, ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-export default function InterviewMode({showModal,setShowModal}) {
+export default function InterviewMode({showModal,setShowModal, violationCounter}) {
   
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [interviewStarted, setInterviewStarted] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
+  const router = useRouter();
+
+  // console.log("Rendering Fullscreen Modal, isFullscreen:", isFullscreen, " showModal:", showModal, "violationCounter:", violationCounter?.current  );
+  
 
   // Check if already in fullscreen
   const checkFullscreen = useCallback(() => {
@@ -19,6 +24,8 @@ export default function InterviewMode({showModal,setShowModal}) {
 
   // Enter fullscreen
   const enterFullscreen = useCallback(async () => {
+
+     console.log("entering fullscreen from children...");
     try {
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
@@ -41,6 +48,7 @@ export default function InterviewMode({showModal,setShowModal}) {
 
   // Exit fullscreen
   const exitFullscreen = useCallback(() => {
+     console.log("Exiting fullscreen from childern...");
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {
@@ -61,6 +69,21 @@ export default function InterviewMode({showModal,setShowModal}) {
     window.history.back();
   };
 
+  const checkViolation = () => {
+    if(violationCounter.current >= 2)
+    {
+      setWarningMessage('You have exited fullscreen mode multiple times. The interview will now end.');
+      exitFullscreen();
+      // alert('Interview ended due to multiple fullscreen violations.');
+      setTimeout(() => {
+        router.replace("/report")
+      }, 3300);
+
+     return true;
+    }
+    return false;
+   
+  }
   // Prevent context menu (right-click)
   useEffect(() => {
     const preventContextMenu = (e) => {
@@ -140,9 +163,10 @@ export default function InterviewMode({showModal,setShowModal}) {
       setIsFullscreen(isNowFullscreen);
       
       // If user exits fullscreen during interview, show modal
-      if (!isNowFullscreen && interviewStarted) {
+      if (!checkViolation() && !isNowFullscreen && interviewStarted) {
+        violationCounter.current += 1
         setShowModal(true);
-        setWarningMessage('You exited fullscreen mode. Please return to fullscreen to continue.');
+        setWarningMessage(`You exited fullscreen mode ${violationCounter.current} times. Please return to fullscreen to continue.`);
       }
     };
 
@@ -161,8 +185,11 @@ export default function InterviewMode({showModal,setShowModal}) {
 
   // Detect tab visibility changes
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && interviewStarted && isFullscreen) {
+
+   const handleVisibilityChange = () => {
+
+      if (!checkViolation() && document.hidden && interviewStarted && isFullscreen) {
+        violationCounter.current += 1
         setShowModal(true);
         setWarningMessage('Tab switching detected! Please return to the interview.');
       }
@@ -175,8 +202,10 @@ export default function InterviewMode({showModal,setShowModal}) {
   // Detect window blur (user switching windows)
   useEffect(() => {
     const handleBlur = () => {
-      if (interviewStarted && isFullscreen) {
+      
+      if (!checkViolation() && interviewStarted && isFullscreen) {
         setShowModal(true);
+        violationCounter.current += 1
         setWarningMessage('Window focus lost! Please stay in the interview window.');
       }
     };
