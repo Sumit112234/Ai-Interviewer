@@ -202,7 +202,7 @@ export default function EnhancedResumeForm() {
       if(!res.ok) throw new Error('Failed to update user')
       const data = await res.json()
     //  console.log('User updated:',data.user)
-
+      localStorage.setItem('questionCount', 0)
       localStorage.setItem("resumeData", JSON.stringify(formData))
       setInsOpen(true)
     

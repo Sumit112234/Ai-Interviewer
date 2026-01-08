@@ -56,6 +56,8 @@ export default function ReportPage() {
 
       const evaluationResult = await response.json()
       setEvaluation(evaluationResult)
+      // localStorage.setItem("interviewData", "")
+
     } catch (error) {
       console.error("Error generating evaluation:", error)
       // Fallback evaluation

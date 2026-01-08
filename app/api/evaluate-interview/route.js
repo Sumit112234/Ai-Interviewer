@@ -5,6 +5,8 @@ import { cohere } from "@ai-sdk/cohere";
 export async function POST(request) {
   try {
     const { conversation, resumeData } = await request.json();
+    // console.log("Received conversation and resume data for evaluation.", conversation, resumeData);
+
 
     // Validate input
     if (!conversation || !Array.isArray(conversation) || conversation.length === 0) {
