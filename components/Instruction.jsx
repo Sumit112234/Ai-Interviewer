@@ -463,6 +463,7 @@ const Instructions = ({isOpen, setIsOpen}) => {
               onClick={() => {
                 if (isAgreed) {
                   setIsOpen(false);
+                  localStorage.setItem("interviewData", "")
                   router.push("/interview")
                 }
               }}

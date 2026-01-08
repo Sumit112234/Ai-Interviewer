@@ -204,6 +204,7 @@ export default function EnhancedResumeForm() {
     //  console.log('User updated:',data.user)
       localStorage.setItem('questionCount', 0)
       localStorage.setItem("resumeData", JSON.stringify(formData))
+      
       setInsOpen(true)
     
      // console.log("Interview started with data:", formData)
